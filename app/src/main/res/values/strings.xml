@@ -10,7 +10,12 @@
     <string name="btn_view_google_maps">Find us on Google Maps!</string>
     <string name="btn_set_your_currency">Set your currency</string>
     <string name="menu_information_prices">Information Prices</string>
-    <string name="intro_text">Welcome to the world famous Lourve Museum!</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="intro_text">
+        Welcome to the world famous Lourve Museum! The application will give you
+        as much information as possible to navigate around the museum.
+        Please select any of the given options to use the application.
+    </string>
 
 
     <!--Currency Activity Strings-->
