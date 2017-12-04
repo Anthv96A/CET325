@@ -8,6 +8,9 @@ import android.view.WindowManager;
 
 public class SplashScreen extends AppCompatActivity {
 
+
+    private static final int DURATION = 5000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,14 +23,14 @@ public class SplashScreen extends AppCompatActivity {
 
         setContentView(R.layout.activity_splash_screen);
 
-        //  Initialise the application with a splash screen with awaiting thread.
+        // Initialise the application with a splash screen with awaiting thread.
 
         Thread thread = new Thread(){
 
             @Override
             public void run(){
                 try{
-                    sleep(5000);
+                    sleep(DURATION);
                     Intent mainMenuIntent = new Intent(getApplicationContext(), MainMenu.class);
                     startActivity(mainMenuIntent);
                     finish();
