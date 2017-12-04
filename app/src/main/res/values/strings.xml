@@ -1,4 +1,25 @@
 <resources>
-    <string name="app_name">Assignment</string>
+
+
+    <!--Main Application Name-->
+    <string name="app_name">Lourve Museum </string>
+
+    <!--Splash Screen Strings-->
     <string name="splash_screen_title">Loading...</string>
+
+    <!--Main Menu Strings, for buttons, menus, text views etc.-->
+    <string name="btn_view_gallery">View Gallery</string>
+    <string name="btn_view_google_maps">Find us on Google Maps!</string>
+    <string name="btn_set_your_currency">Set your currency</string>
+    <string name="menu_information_prices">Information Prices</string>
+    <string name="intro_text">Welcome to the world famous Lourve Museum!</string>
+
+
+    <!--Currency Activity Strings-->
+    <string-array name="currencies">
+        <item>GBP (£)</item>
+        <item>EUR (€)</item>
+        <item>USD ($)</item>
+    </string-array>
+
 </resources>

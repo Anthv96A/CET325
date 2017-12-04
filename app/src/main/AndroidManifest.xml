@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bg71ul.assignment">
 
+    <permission
+        android:name="com.example.bg71ul.assignment.READ_DATABASE"
+        android:protectionLevel="normal" />
+    <permission
+        android:name="com.example.bg71ul.assignment.WRITE_DATABASE"
+        android:protectionLevel="normal" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,15 +17,15 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".SplashScreen"
-            android:label="@string/splash_screen_title"
-            >
+            android:label="@string/splash_screen_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainMenu"></activity>
+        <activity android:name=".MainMenu" />
+        <activity android:name=".CurrencyActivity"></activity>
     </application>
 
 </manifest>
