@@ -55,6 +55,9 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
         switch (id){
             case R.id.btn_gallery:
                 Toast.makeText(this, "Gallery Intent", Toast.LENGTH_SHORT).show();
+                intent = new Intent(getApplicationContext(),GalleryActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 break;
             case R.id.btn_google_maps:
                 Toast.makeText(this, "Google Maps Intent", Toast.LENGTH_SHORT).show();

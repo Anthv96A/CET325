@@ -33,7 +33,6 @@ public class SplashScreen extends AppCompatActivity {
                     sleep(DURATION);
                     Intent mainMenuIntent = new Intent(getApplicationContext(), MainMenu.class);
                     startActivity(mainMenuIntent);
-                    overridePendingTransition(R.anim.up_in,R.anim.down_out);
                     finish();
                 } catch (InterruptedException e){
                     e.printStackTrace();

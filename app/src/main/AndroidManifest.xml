@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".SplashScreen"
-            android:label="@string/splash_screen_title">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +25,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainMenu" />
-        <activity android:name=".CurrencyActivity"></activity>
+        <activity android:name=".CurrencyActivity" />
+        <activity
+            android:name=".GalleryActivity"
+            android:label="@string/title_activity_gallery"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

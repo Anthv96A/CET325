@@ -4,8 +4,6 @@
     <!--Main Application Name-->
     <string name="app_name">Lourve Museum </string>
 
-    <!--Splash Screen Strings-->
-    <string name="splash_screen_title">Loading...</string>
 
     <!--Main Menu Strings, for buttons, menus, text views etc.-->
     <string name="btn_view_gallery">View Gallery</string>
@@ -21,5 +19,11 @@
         <item>EUR (€)</item>
         <item>USD ($)</item>
     </string-array>
+    <string name="title_activity_gallery">GalleryActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 
 </resources>
