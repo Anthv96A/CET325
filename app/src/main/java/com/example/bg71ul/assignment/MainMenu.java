@@ -54,7 +54,6 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
 
         switch (id){
             case R.id.btn_gallery:
-                Toast.makeText(this, "Gallery Intent", Toast.LENGTH_SHORT).show();
                 intent = new Intent(getApplicationContext(),GalleryActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
@@ -66,7 +65,6 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
                 intent = new Intent(getApplicationContext(),CurrencyActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
-                //Toast.makeText(this, "Currency Intent", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 Toast.makeText(this, "Unrecognised", Toast.LENGTH_SHORT).show();
