@@ -1,4 +1,4 @@
-package com.example.bg71ul.assignment;
+package com.example.bg71ul.assignment.activities;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
+import com.example.bg71ul.assignment.R;
 
 import java.util.ArrayList;
 
@@ -44,15 +46,15 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
         try{
 
             switch (selectedItem){
+                case 0:
+                    editor.putInt("currencySelection", selectedItem);
+                    editor.commit();
+                    break;
                 case 1:
                     editor.putInt("currencySelection", selectedItem);
                     editor.commit();
                     break;
                 case 2:
-                    editor.putInt("currencySelection", selectedItem);
-                    editor.commit();
-                    break;
-                case 3:
                     editor.putInt("currencySelection", selectedItem);
                     editor.commit();
                     break;

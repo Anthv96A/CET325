@@ -1,4 +1,4 @@
-package com.example.bg71ul.assignment;
+package com.example.bg71ul.assignment.activities;
 
 import android.app.LoaderManager;
 import android.content.ContentValues;
@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -23,17 +25,26 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.bg71ul.assignment.Gallery;
+import com.example.bg71ul.assignment.MuseumCursorAdapter;
+import com.example.bg71ul.assignment.MuseumDBOpenHelper;
+import com.example.bg71ul.assignment.MuseumProvider;
+import com.example.bg71ul.assignment.R;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 public class GalleryActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
     private CursorAdapter cursorAdapter = null;
     private ListView list;
+    public static int checker = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +86,7 @@ public class GalleryActivity extends AppCompatActivity
         values.put(MuseumDBOpenHelper.DB_KEY_ROOM, newGallery.getTitle());
         values.put(MuseumDBOpenHelper.DB_KEY_DESCRIPTION, newGallery.getDescription());
         values.put(MuseumDBOpenHelper.DB_KEY_YEAR, newGallery.getYear());
+        values.put(MuseumDBOpenHelper.DB_KEY_IMAGE, setUpDefaultImage());
 
         getContentResolver().insert(MuseumProvider.CONTENT_URI, values);
         Snackbar snackbar = Snackbar.make(view,"New Gallery created",Snackbar.LENGTH_SHORT);
@@ -117,27 +129,7 @@ public class GalleryActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.gallery, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -154,7 +146,13 @@ public class GalleryActivity extends AppCompatActivity
                 startActivity(mainMenu);
                 break;
             case R.id.allGallery:
-                QueryDB(0);
+                makeQuery(0);
+                break;
+            case R.id.sortTitle:
+                makeQuery(1);
+                break;
+            case R.id.sortArtist:
+                makeQuery(2);
                 break;
 
         }
@@ -177,7 +175,7 @@ public class GalleryActivity extends AppCompatActivity
         cursorAdapter.swapCursor(null);
     }
 
-    public void QueryDB(int index){
+    public void makeQuery(int index){
         this.list = (ListView) findViewById(R.id.listView_gallery);
 
         MuseumDBOpenHelper museumDBOpenHelper = new MuseumDBOpenHelper(this);
@@ -196,7 +194,7 @@ public class GalleryActivity extends AppCompatActivity
         switch (index){
             case 0:
                 // Show all and ordering by rank default
-               // orderBy = MuseumDBOpenHelper.DB_KEY_RANK + " desc";
+                orderBy = MuseumDBOpenHelper.DB_KEY_RANK + " desc";
                 break;
             case 1:
                 // Order paintings by title alphabetically
@@ -251,6 +249,10 @@ public class GalleryActivity extends AppCompatActivity
         final AlertDialog.Builder createNewGallery = new AlertDialog.Builder(GalleryActivity.this);
         createNewGallery.setView(getGalleryIdView);
 
+        if(checker > 0){
+            Toast.makeText(GalleryActivity.this, "Please insert into Artist, Title and Year.", Toast.LENGTH_LONG).show();
+        }
+
         final EditText artistInput = (EditText) getGalleryIdView.findViewById(R.id.editTextDialogArtistInput);
         final EditText titleInput = (EditText) getGalleryIdView.findViewById(R.id.editTextDialogTitleInput);
         final EditText roomInput = (EditText) getGalleryIdView.findViewById(R.id.editTextDialogRoomInput);
@@ -260,6 +262,7 @@ public class GalleryActivity extends AppCompatActivity
         createNewGallery.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                checker = 0;
                 Snackbar snackbar = Snackbar.make(view, "Action Cancelled", Snackbar.LENGTH_SHORT);
 
                 snackbar.setAction("Action",null).show();
@@ -271,7 +274,11 @@ public class GalleryActivity extends AppCompatActivity
                         || titleInput.getText().toString().trim().isEmpty() || titleInput.getText().length() == 0
                         || yearInput.getText().toString().trim().isEmpty() || yearInput.getText().length() == 0
                         ) {
-                    Toast.makeText(GalleryActivity.this, "Please insert into Artist, Title and Year.", Toast.LENGTH_LONG).show();
+                    // When we first call the dialog, we don't want to tell the user about
+                    // mandatory fields. If they haven't added them, the recursive method
+                    // check whether the fields were not answered.
+                    checker++;
+                    // Recursive method call to dialog if mandatory fields are not met.
                     createDialog(view);
                 } else {
                     Gallery gallery = new Gallery();
@@ -280,17 +287,37 @@ public class GalleryActivity extends AppCompatActivity
                     gallery.setRoom(roomInput.getText().toString());
                     gallery.setDescription(descriptionInput.getText().toString());
                     gallery.setYear(yearInput.getText().toString());
-
                     createNewGallery(gallery, view);
                 }
-
-
-
-
 
             }
         }).create().show();
 
+    }
+
+
+    public String setUpDefaultImage(){
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_pic);
+        bitmap = Bitmap.createScaledBitmap(bitmap,600,400,false);
+        OutputStream output;
+        String filename = "default.jpg";
+
+        // Attempt to save file
+        final File file = new File(getApplicationContext().getExternalFilesDir
+                (Environment.DIRECTORY_PICTURES), filename);
+
+        try{
+            output = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, output);
+            output.flush();
+            output.close();
+        } catch (Exception e){
+            e.printStackTrace();
+            Toast.makeText(this, "Error: Cannot create file", Toast.LENGTH_SHORT).show();
+        }
+
+        return filename;
     }
 
 

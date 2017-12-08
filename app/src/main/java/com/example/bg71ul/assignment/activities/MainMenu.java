@@ -1,4 +1,4 @@
-package com.example.bg71ul.assignment;
+package com.example.bg71ul.assignment.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.example.bg71ul.assignment.R;
+import com.example.bg71ul.assignment.activities.CurrencyActivity;
+import com.example.bg71ul.assignment.activities.GalleryActivity;
 
 public class MainMenu extends AppCompatActivity implements View.OnClickListener{
 

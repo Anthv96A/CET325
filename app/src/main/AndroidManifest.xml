@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SplashScreen"
+            android:name=".activities.SplashScreen"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,10 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainMenu" />
-        <activity android:name=".CurrencyActivity" />
+        <activity android:name=".activities.MainMenu" />
+        <activity android:name=".activities.CurrencyActivity" />
         <activity
-            android:name=".GalleryActivity"
+            android:name=".activities.GalleryActivity"
             android:label="@string/title_activity_gallery"
             android:theme="@style/AppTheme.NoActionBar" />
 
