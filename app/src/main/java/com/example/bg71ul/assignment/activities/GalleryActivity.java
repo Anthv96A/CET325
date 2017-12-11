@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -41,7 +42,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 public class GalleryActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener{
     private CursorAdapter cursorAdapter = null;
     private ListView list;
     public static int checker = 0;
@@ -57,7 +58,8 @@ public class GalleryActivity extends AppCompatActivity
 
         list = (ListView)findViewById(R.id.listView_gallery);
         list.setEmptyView(findViewById(R.id.empty));
-
+        list.setClickable(true);
+        list.setOnItemClickListener(this.clicked);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
@@ -239,6 +241,8 @@ public class GalleryActivity extends AppCompatActivity
         if(id == R.id.fab){
             createDialog(view);
         }
+
+
     }
 
     private void createDialog(final View view){
@@ -320,6 +324,21 @@ public class GalleryActivity extends AppCompatActivity
         return filename;
     }
 
+
+    private AdapterView.OnItemClickListener clicked = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            String selected;
+            Cursor cursor = (Cursor) list.getItemAtPosition(i);
+            selected = cursor.getString(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_ID));
+
+            Intent detailsIntent = new Intent(view.getContext(), DetailActivity.class);
+            detailsIntent.putExtra("id", selected);
+            startActivity(detailsIntent);
+
+        }
+    };
 
 
 
