@@ -28,7 +28,7 @@ import java.util.List;
 public class SplashScreen extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
 
-    private static final int DURATION = 5000;
+    private static final int DURATION = 3000;
 
     private static final int WRITE_TO_EXTERNAL_STORAGE = 0;
 
@@ -168,6 +168,8 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
 
     private void createGallery(String artist,String title,String description, String room, double rank, int year, int pictureId) {
 
+        int notEditable = 0;
+
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), pictureId);
         bitmap = Bitmap.createScaledBitmap(bitmap,600,400,false);
         OutputStream output;
@@ -199,6 +201,7 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
         values.put(MuseumDBOpenHelper.DB_KEY_RANK, rank);
         values.put(MuseumDBOpenHelper.DB_KEY_YEAR, year);
         values.put(MuseumDBOpenHelper.DB_KEY_IMAGE, filename);
+        values.put(MuseumDBOpenHelper.DB_KEY_EDITABLE, notEditable);
 
         getContentResolver().insert(MuseumProvider.CONTENT_URI, values);
     }

@@ -52,14 +52,41 @@ public class GalleryActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
+        restartLoader();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         list = (ListView)findViewById(R.id.listView_gallery);
         list.setEmptyView(findViewById(R.id.empty));
         list.setClickable(true);
+
         list.setOnItemClickListener(this.clicked);
+
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long id){
+
+                LayoutInflater li = LayoutInflater.from(GalleryActivity.this);
+                View getDeleteDialog = li.inflate(R.layout.delete_gallery,null);
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(GalleryActivity.this);
+                alertDialogBuilder.setView(getDeleteDialog);
+
+                alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.dismiss();
+                    }
+                }).setPositiveButton("Delete", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        deleteGallery(id, position);
+                    }
+                }).create().show();
+                return true;
+            }
+
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
@@ -81,14 +108,16 @@ public class GalleryActivity extends AppCompatActivity
 
 
     private void createNewGallery(Gallery newGallery, View view){
-        ContentValues values = new ContentValues();
+        final int editable = 1;
 
+        ContentValues values = new ContentValues();
         values.put(MuseumDBOpenHelper.DB_KEY_ARTIST, newGallery.getArtist());
         values.put(MuseumDBOpenHelper.DB_KEY_TITLE, newGallery.getTitle());
         values.put(MuseumDBOpenHelper.DB_KEY_ROOM, newGallery.getTitle());
         values.put(MuseumDBOpenHelper.DB_KEY_DESCRIPTION, newGallery.getDescription());
         values.put(MuseumDBOpenHelper.DB_KEY_YEAR, newGallery.getYear());
         values.put(MuseumDBOpenHelper.DB_KEY_IMAGE, setUpDefaultImage());
+        values.put(MuseumDBOpenHelper.DB_KEY_EDITABLE, editable);
 
         getContentResolver().insert(MuseumProvider.CONTENT_URI, values);
         Snackbar snackbar = Snackbar.make(view,"New Gallery created",Snackbar.LENGTH_SHORT);
@@ -100,26 +129,6 @@ public class GalleryActivity extends AppCompatActivity
     }
 
 
-//    public void listViewClickListener(){
-//        list = (ListView)findViewById(R.id.listView_gallery);
-//        //set onclick listener for list
-//        list.setClickable(true);
-//        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                //get the title of the item selected
-//                //create a view containing the get track details activity
-////                final Cursor cursor = (Cursor)list.getItemAtPosition(position);
-////                selectedItem = cursor.getString(cursor.getColumnIndexOrThrow
-////                        (PlaceDBOpenHelper.KEY_ID));
-////                Intent intent = new Intent(view.getContext(), PlacesDetailView.class);
-////                intent.putExtra("index", selectedItem);
-////                intent.putExtra("localCurrency", localCurrencyRates);
-////                intent.putExtra("favCurrency", favCurrencyRates);
-////                startActivity(intent);
-//            }
-//        });
-//    }
 
     @Override
     public void onBackPressed() {
@@ -131,6 +140,24 @@ public class GalleryActivity extends AppCompatActivity
         }
     }
 
+
+    private void deleteGallery(long id, int position){
+        String whereClause = MuseumDBOpenHelper.DB_KEY_ID + "= '" + id + "'";
+        Cursor cursor = (Cursor) list.getItemAtPosition(position);
+        boolean isEditable = (cursor.getInt(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_EDITABLE)) == 1);
+
+        if(!isEditable){
+
+            Toast.makeText(this, "You cannot delete this record", Toast.LENGTH_SHORT).show();
+            return;
+
+        }
+
+        getContentResolver().delete(MuseumProvider.CONTENT_URI,whereClause, null);
+        Toast.makeText(this, "Record deleted", Toast.LENGTH_SHORT).show();
+        restartLoader();
+
+    }
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -339,6 +366,12 @@ public class GalleryActivity extends AppCompatActivity
 
         }
     };
+
+
+    private void restartLoader() {
+        getLoaderManager().restartLoader(0,null,this);
+    }
+
 
 
 

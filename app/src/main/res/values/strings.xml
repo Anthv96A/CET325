@@ -37,5 +37,20 @@
     <string name="enter_description">Enter Description</string>
     <string name="enter_year">Enter Year</string>
 
+    <string name="delete_gallery">You sure you want to delete this gallery?</string>
+
+
+
+
+    <!--Detail Activity-->
+    <string name="selected_artist">Artist:</string>
+    <string name="selected_title">Title:</string>
+    <string name="selected_year">Year:</string>
+    <string name="selected_room">Room:</string>
+    <string name="selected_description">Description</string>
+    <string name="edit_gallery">Edit Gallery</string>
+    <string name="edit">Would you like to edit?</string>
+    <string name="rate_gallery">Rate Gallery</string>
+
 
 </resources>

@@ -24,6 +24,7 @@ public class MuseumDBOpenHelper extends SQLiteOpenHelper{
     public static final String DB_KEY_IMAGE = "image";
     public static final String DB_KEY_YEAR = "year";
     public static final String DB_KEY_RANK = "rank";
+    public static final String DB_KEY_EDITABLE = "editable";
 
     // Get all columns
     public static final String[] ALL_COLUMNS = {
@@ -34,7 +35,8 @@ public class MuseumDBOpenHelper extends SQLiteOpenHelper{
             DB_KEY_DESCRIPTION,
             DB_KEY_IMAGE,
             DB_KEY_YEAR,
-            DB_KEY_RANK
+            DB_KEY_RANK,
+            DB_KEY_EDITABLE
     };
 
     private static final String CREATE_TABLE =
@@ -46,6 +48,7 @@ public class MuseumDBOpenHelper extends SQLiteOpenHelper{
                     DB_KEY_DESCRIPTION + " TEXT, " +
                     DB_KEY_IMAGE + " TEXT, " +
                     DB_KEY_YEAR + " INTEGER, " +
+                    DB_KEY_EDITABLE + " INTEGER, " +
                     DB_KEY_RANK + " INTEGER);";
 
 

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/view_padding" >
+
+
+    <RatingBar
+        android:id="@+id/ratingBarAny"
+        android:theme="@style/RatingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        />
+
+
+    <EditText
+        android:id="@+id/editTextDialogArtistInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_artist"/>
+
+    <EditText
+        android:id="@+id/editTextDialogTitleInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_title" />
+
+    <EditText
+        android:id="@+id/editTextDialogRoomInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_room" />
+
+    <EditText
+        android:id="@+id/editTextDialogDescriptionInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_description" />
+
+    <EditText
+        android:id="@+id/editTextDialogYearInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_year"
+        android:inputType="number" />
+
+</LinearLayout>
