@@ -34,6 +34,7 @@ public class DetailActivity extends AppCompatActivity {
     private boolean canEditFully;
     private float rank;
     private String title;
+    private static int checker = 0;
     RatingBar edited;
     TextView artistTextView = null;
     TextView yearTextView = null;
@@ -89,7 +90,6 @@ public class DetailActivity extends AppCompatActivity {
         rankRatingBar = (RatingBar) findViewById(R.id.ratingBarGallery);
         galleryImage = (ImageView) findViewById(R.id.imageViewGallery);
 
-
         Cursor cursor = QueryDatabase();
 
         if(cursor != null && cursor.moveToFirst()){
@@ -113,8 +113,6 @@ public class DetailActivity extends AppCompatActivity {
             canEditFully = (cursor.getInt(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_EDITABLE)) == 1);
 
 
-
-
             if(ranking == null){
                 setRank(0);
             } else{
@@ -124,7 +122,6 @@ public class DetailActivity extends AppCompatActivity {
             if(room == null || room.isEmpty()){
                 room = "No room yet set";
             }
-
 
             // If we don't have an image already, set the default
             if(image.isEmpty() || image == null){
@@ -181,119 +178,145 @@ public class DetailActivity extends AppCompatActivity {
     private void editFields(){
 
         if(canEditFully){
-            LayoutInflater layoutInflater = LayoutInflater.from(DetailActivity.this);
-            View getEditDialog = layoutInflater.inflate(R.layout.edit_anyfield,null);
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DetailActivity.this);
-
-
-            Gallery editGallery = new Gallery();
-
-            if(artistTextView.getText().toString() != null){
-                editGallery.setArtist(artistTextView.getText().toString());
-            } else {
-                editGallery.setArtist("");
-            }
-
-            if(yearTextView.getText().toString() != null){
-                editGallery.setYear(yearTextView.getText().toString());
-            } else{
-                editGallery.setYear("2017");
-            }
-
-            if(roomTextView.getText().toString() != null){
-                editGallery.setRoom(roomTextView.getText().toString());
-            } else{
-                editGallery.setRoom("");
-            }
-
-            if(title != null){
-                editGallery.setTitle(title);
-            } else{
-                editGallery.setTitle("");
-            }
-
-            if(descriptionTextView.getText().toString() !=  null){
-                editGallery.setDescription(descriptionTextView.getText().toString());
-            } else{
-                editGallery.setDescription("");
-            }
-
-
-            final TextView artistDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogArtistInput);
-            final TextView titleDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogTitleInput);
-            final TextView yearDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogYearInput);
-            final TextView descriptionDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogDescriptionInput);
-            TextView roomDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogRoomInput);
-
-            edited = (RatingBar) getEditDialog.findViewById(R.id.ratingBarAny);
-
-            artistDialogTextview.setText(editGallery.getArtist());
-            titleDialogTextview.setText(editGallery.getTitle());
-            yearDialogTextview.setText(editGallery.getYear());
-            descriptionDialogTextview.setText(editGallery.getDescription());
-            roomDialogTextview.setText(editGallery.getRoom());
-
-            alertDialogBuilder.setView(getEditDialog);
-
-            alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    Toast.makeText(DetailActivity.this, "Dismissed", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
-            }).setPositiveButton("Edit", new DialogInterface.OnClickListener(){
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    String where = "_id = " + getID;
-                    ContentValues values = new ContentValues();
-                    values.put(MuseumDBOpenHelper.DB_KEY_ARTIST, artistDialogTextview.getText().toString());
-                    values.put(MuseumDBOpenHelper.DB_KEY_TITLE, titleDialogTextview.getText().toString());
-                    values.put(MuseumDBOpenHelper.DB_KEY_ROOM, roomTextView.getText().toString());
-                    values.put(MuseumDBOpenHelper.DB_KEY_YEAR, yearDialogTextview.getText().toString());
-                    values.put(MuseumDBOpenHelper.DB_KEY_DESCRIPTION, descriptionDialogTextview.getText().toString());
-                    values.put(MuseumDBOpenHelper.DB_KEY_RANK, edited.getRating());
-
-                    getContentResolver().update(MuseumProvider.CONTENT_URI,values,where,null);
-                    // After editing, we redirect back to newly edited ranking.
-                    // Ensure we pass the id, otherwise it will fail
-                    Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                    intent.putExtra("id", getID);
-                    startActivity(intent);
-
-                }
-            }).create().show();
-
+            // The can edit fully is a boolean value that checks from the database where we can either
+            // edit pre-loaded rank or fully edit a manually added rank.
+            editAllFieldsDialog();
         } else {
-
-            LayoutInflater layoutInflater = LayoutInflater.from(DetailActivity.this);
-            View getEditDialog = layoutInflater.inflate(R.layout.edit_preloaded_rank, null);
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DetailActivity.this);
-
-            edited = (RatingBar) getEditDialog.findViewById(R.id.editRatingPreLoaded);
-            edited.setRating(getRank());
-
-            alertDialogBuilder.setView(getEditDialog);
-
-            alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    Toast.makeText(DetailActivity.this, "Dismissed", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
-            }).setPositiveButton("Edit", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-
-                    String where = "_id = " + getID;
-
-                    ContentValues values = new ContentValues();
-                    values.put(MuseumDBOpenHelper.DB_KEY_RANK, edited.getRating());
-
-                    getContentResolver().update(MuseumProvider.CONTENT_URI,values,where,null);
-                    // After editing, we redirect back to newly edited ranking.
-                    // Ensure we pass the id, otherwise it will fail
-                    Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                    intent.putExtra("id", getID);
-                    startActivity(intent);
-                }
-            }).create().show();
+            editOnlyRankDialog();
         }
+    }
+
+
+
+    private void editAllFieldsDialog(){
+
+        if(checker > 0){
+            Toast.makeText(this, "You can't leave the fields: Title, Artist and Year blank", Toast.LENGTH_SHORT).show();
+        }
+
+        LayoutInflater layoutInflater = LayoutInflater.from(DetailActivity.this);
+        View getEditDialog = layoutInflater.inflate(R.layout.edit_anyfield,null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DetailActivity.this);
+
+        Gallery editGallery = new Gallery();
+
+        if(artistTextView.getText().toString() != null){
+            editGallery.setArtist(artistTextView.getText().toString());
+        } else {
+            editGallery.setArtist(new String());
+        }
+
+        if(yearTextView.getText().toString() != null){
+            editGallery.setYear(yearTextView.getText().toString());
+        } else{
+            editGallery.setYear("2017");
+        }
+
+        if(roomTextView.getText().toString() != null){
+            editGallery.setRoom(roomTextView.getText().toString());
+        } else{
+            editGallery.setRoom(new String());
+        }
+
+        if(title != null){
+            editGallery.setTitle(title);
+        } else{
+            editGallery.setTitle(new String());
+        }
+
+        if(descriptionTextView.getText().toString() !=  null){
+            editGallery.setDescription(descriptionTextView.getText().toString());
+        } else{
+            editGallery.setDescription(new String());
+        }
+
+        final TextView artistDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogArtistInput);
+        final TextView titleDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogTitleInput);
+        final TextView yearDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogYearInput);
+        final TextView descriptionDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogDescriptionInput);
+        TextView roomDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogRoomInput);
+
+        edited = (RatingBar) getEditDialog.findViewById(R.id.ratingBarAny);
+
+        artistDialogTextview.setText(editGallery.getArtist());
+        titleDialogTextview.setText(editGallery.getTitle());
+        yearDialogTextview.setText(editGallery.getYear());
+        descriptionDialogTextview.setText(editGallery.getDescription());
+        roomDialogTextview.setText(editGallery.getRoom());
+
+        alertDialogBuilder.setView(getEditDialog);
+
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Toast.makeText(DetailActivity.this, "Dismissed", Toast.LENGTH_SHORT).show();
+                checker = 0;
+                dialog.dismiss();
+            }
+        }).setPositiveButton("Edit", new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                if(artistTextView.getText().toString() == " " || artistDialogTextview.getText().toString().isEmpty()
+                        || titleDialogTextview.getText().toString() == " " || titleDialogTextview.getText().toString().isEmpty()
+                        || yearDialogTextview.getText().toString().isEmpty() || yearTextView.getText().toString() == ""){
+                    checker ++;
+                    editAllFieldsDialog();
+                    return;
+                }
+                checker = 0;
+                String where = "_id = " + getID;
+                ContentValues values = new ContentValues();
+                values.put(MuseumDBOpenHelper.DB_KEY_ARTIST, artistDialogTextview.getText().toString());
+                values.put(MuseumDBOpenHelper.DB_KEY_TITLE, titleDialogTextview.getText().toString());
+                values.put(MuseumDBOpenHelper.DB_KEY_ROOM, roomTextView.getText().toString());
+                values.put(MuseumDBOpenHelper.DB_KEY_YEAR, yearDialogTextview.getText().toString());
+                values.put(MuseumDBOpenHelper.DB_KEY_DESCRIPTION, descriptionDialogTextview.getText().toString());
+                values.put(MuseumDBOpenHelper.DB_KEY_RANK, edited.getRating());
+
+                getContentResolver().update(MuseumProvider.CONTENT_URI,values,where,null);
+                // After editing, we redirect back to newly edited ranking.
+                // Ensure we pass the id, otherwise it will fail
+                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                intent.putExtra("id", getID);
+                startActivity(intent);
+
+            }
+        }).create().show();
+
+    }
+
+
+    private void editOnlyRankDialog(){
+
+        LayoutInflater layoutInflater = LayoutInflater.from(DetailActivity.this);
+        View getEditDialog = layoutInflater.inflate(R.layout.edit_preloaded_rank, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DetailActivity.this);
+
+        edited = (RatingBar) getEditDialog.findViewById(R.id.editRatingPreLoaded);
+        edited.setRating(getRank());
+
+        alertDialogBuilder.setView(getEditDialog);
+
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Toast.makeText(DetailActivity.this, "Dismissed", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        }).setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                String where = "_id = " + getID;
+
+                ContentValues values = new ContentValues();
+                values.put(MuseumDBOpenHelper.DB_KEY_RANK, edited.getRating());
+
+                getContentResolver().update(MuseumProvider.CONTENT_URI,values,where,null);
+                // After editing, we redirect back to newly edited ranking.
+                // Ensure we pass the id, otherwise it will fail
+                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                intent.putExtra("id", getID);
+                startActivity(intent);
+            }
+        }).create().show();
     }
 
 

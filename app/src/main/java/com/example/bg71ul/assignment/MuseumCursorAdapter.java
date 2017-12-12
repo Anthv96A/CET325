@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 /**
- * Created by antho on 07/12/2017.
+ * Created by Anthony Vest on 07/12/2017.
  */
 
 public class MuseumCursorAdapter extends CursorAdapter{

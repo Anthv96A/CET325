@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by antho on 07/12/2017.
+ * Created by Anthony Vest on 07/12/2017.
  */
 
 public class MuseumDBOpenHelper extends SQLiteOpenHelper{
@@ -40,7 +40,7 @@ public class MuseumDBOpenHelper extends SQLiteOpenHelper{
     };
 
     private static final String CREATE_TABLE =
-            "CREATE TABLE " + MUSEUM_TABLE_NAME + "(" +
+            "CREATE TABLE " + MUSEUM_TABLE_NAME + "( " +
                     DB_KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     DB_KEY_ARTIST + " TEXT, " +
                     DB_KEY_TITLE + " TEXT, " +

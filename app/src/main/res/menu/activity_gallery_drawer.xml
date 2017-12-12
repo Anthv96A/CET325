@@ -11,6 +11,14 @@
                     android:id="@+id/allGallery"
                     android:title="All" />
 
+                <item
+                    android:id="@+id/allRanked"
+                    android:title="Ranked" />
+
+                <item
+                    android:id="@+id/allNotRanked"
+                    android:title="Not Ranked" />
+
             </menu>
         </item>
     </group>

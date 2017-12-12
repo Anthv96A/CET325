@@ -19,24 +19,28 @@
         android:id="@+id/editTextDialogArtistInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textCapWords"
         android:hint="@string/enter_artist"/>
 
     <EditText
         android:id="@+id/editTextDialogTitleInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textCapWords"
         android:hint="@string/enter_title" />
 
     <EditText
         android:id="@+id/editTextDialogRoomInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textCapWords"
         android:hint="@string/enter_room" />
 
     <EditText
         android:id="@+id/editTextDialogDescriptionInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textCapWords"
         android:hint="@string/enter_description" />
 
     <EditText

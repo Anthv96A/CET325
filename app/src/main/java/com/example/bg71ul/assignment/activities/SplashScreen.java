@@ -58,7 +58,6 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                     }
 
 
-
                 } catch (Exception e){
                     e.printStackTrace();
 
@@ -121,7 +120,7 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
 
     private void initialiseDatabase() {
 
-        // Mona Lisa
+        // 1.
        createGallery(
                "Leonardo Da Vinci",
                "Mona Lisa",
@@ -134,6 +133,7 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                R.drawable.mona_lisa
                );
 
+        // 2.
         createGallery(
                 "Titian",
                 "Portrait of Francis I",
@@ -144,6 +144,7 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                 1539,
                 R.drawable.francois_the_first
         );
+        // 3.
         createGallery(
                 "Johannes Vermeer",
                 "The Astronomer",
@@ -154,6 +155,7 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                 1668,
                 R.drawable.the_astronomer
         );
+        // 4.
         createGallery(
                 "Jan van Eyck",
                 "Madonna of Chancellor Rolin",
@@ -163,6 +165,72 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                 1.5,
                 1435,
                 R.drawable.chancellor_rolin
+        );
+
+        // 5.
+        createGallery(
+                "Eugène Delacroix",
+                "Liberty Leading the People",
+                "Liberty Leading the People (French: La Liberté guidant le peuple [la libɛʁte ɡidɑ̃ lə pœpl]) is a painting by Eugène Delacroix commemorating the July Revolution of 1830, which toppled King Charles X of France. A woman personifying the concept and the Goddess of Liberty leads the people forward over a barricade and the bodies of the fallen, holding the flag of the French Revolution – the tricolour flag, which remains France's national flag – in one hand and brandishing a bayonetted musket with the other. The figure of Liberty is also viewed as a symbol of France and the French Republic known as Marianne.",
+                "Room 100",
+                4,
+                1830,
+                R.drawable.liberty
+        );
+
+        // 6.
+        createGallery(
+                "Leonardo Da Vinci",
+                "La belle ferronnièr",
+                "La belle ferronnière is a portrait of a lady, usually attributed to Leonardo da Vinci, in the Louvre. It is also known as Portrait of an Unknown Woman. The painting's title, applied as early as the seventeenth century, identifying the sitter as the wife or daughter of an ironmonger (a ferronnier), was said to be discreetly alluding to a reputed mistress of Francis I of France, married to a certain Le Ferron. The tale is a romantic legend of revenge in which the aggrieved husband intentionally infects himself with syphilis, which he passes to the king through infecting his wife.",
+                "Salle des Etats",
+                5,
+                1490,
+                R.drawable.belle
+        );
+
+        // 7.
+        createGallery(
+                "Eugène Delacroix",
+                "The Death of Sardanapalus",
+                "The main focus of Death of Sardanapalus is a large bed draped in rich red fabric. On it lies a man overseeing a scene of chaos with a disinterested eye. He is dressed in flowing white fabrics and sumptuous gold around his neck and head. A woman lies dead at his feet, prone across the lower half of the large bed. She is one of five or six in the scene, all in various shades of undress, and all in assorted throes of death by the hands of the half dozen men in the scene. There are several people being stabbed with knives and one man is dying from a self-inflicted wound from a sword, and a man in the left foreground is attempting to kill an intricately adorned horse. A young man by the king’s right elbow is standing behind a side table which has an elaborate golden decanter and a cup. There are golden elephant heads at the base of the bed, as well as various valuable trinkets scattered amongst the carnage. In the background, several architectural elements are visible but difficult to discern.",
+                "Room 100",
+                4,
+                1827,
+                R.drawable.sardanapalus
+        );
+
+        // 8.
+        createGallery(
+                "Paolo Veronese",
+                "The Wedding at Cana",
+                "The Wedding Feast at Cana (1563), by Paolo Veronese, is a representational painting that depicts the Bible story of the Marriage at Cana, a wedding banquet at which Jesus converts water to wine (John 2:1–11). The work is a large-format (6.77 m × 9.94 m) oil painting executed in the Mannerist style of the High Renaissance (1490–1527); as such, The Wedding Feast at Cana is the most expansive canvas (67.29 m2) in the paintings collection of the Musée du Louvre.",
+                "Room 21",
+                5,
+                1563,
+                R.drawable.cana
+        );
+
+        // 9.
+        createGallery(
+                "Théodore Géricault",
+                "The Raft of the Medusa",
+                "The Raft of the Medusa (French: Le Radeau de la Méduse [lə ʁado d(ə) la medyz]) is an oil painting of 1818–1819 by the French Romantic painter and lithographer Théodore Géricault (1791–1824). Completed when the artist was 27, the work has become an icon of French Romanticism. At 491 cm × 716 cm , it is an over-life-size painting that depicts a moment from the aftermath of the wreck of the French naval frigate Méduse, which ran aground off the coast of today's Mauritania on 2 July 1816. On 5 July 1816, at least 147 people were set adrift on a hurriedly constructed raft; all but 15 died in the 13 days before their rescue, and those who survived endured starvation and dehydration and practised cannibalism. The event became an international scandal, in part because its cause was widely attributed to the incompetence of the French captain.",
+                "Room 82",
+                3,
+                1819,
+                R.drawable.medusa
+        );
+
+        // 10.
+        createGallery(
+                "Jacques-Louis David",
+                "The Intervention of the Sabine Women",
+                "The Intervention of the Sabine Women is a 1799 painting by the French painter Jacques-Louis David, showing a legendary episode following the abduction of the Sabine women by the founding generation of Rome. Work on the painting commenced in 1796, after his estranged wife visited him in jail. He conceived the idea of telling the story, to honour his wife, with the theme being love prevailing over conflict. The painting was also seen as a plea for the people to reunite after the bloodshed of the revolution. Its realization took him nearly four years.",
+                "Room 92",
+                3,
+                1799,
+                R.drawable.sabine
         );
     }
 

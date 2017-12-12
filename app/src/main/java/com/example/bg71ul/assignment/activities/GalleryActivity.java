@@ -46,6 +46,7 @@ public class GalleryActivity extends AppCompatActivity
     private CursorAdapter cursorAdapter = null;
     private ListView list;
     public static int checker = 0;
+    private int selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +110,7 @@ public class GalleryActivity extends AppCompatActivity
 
     private void createNewGallery(Gallery newGallery, View view){
         final int editable = 1;
+        final int initialRank = 0;
 
         ContentValues values = new ContentValues();
         values.put(MuseumDBOpenHelper.DB_KEY_ARTIST, newGallery.getArtist());
@@ -118,6 +120,7 @@ public class GalleryActivity extends AppCompatActivity
         values.put(MuseumDBOpenHelper.DB_KEY_YEAR, newGallery.getYear());
         values.put(MuseumDBOpenHelper.DB_KEY_IMAGE, setUpDefaultImage());
         values.put(MuseumDBOpenHelper.DB_KEY_EDITABLE, editable);
+        values.put(MuseumDBOpenHelper.DB_KEY_RANK, initialRank);
 
         getContentResolver().insert(MuseumProvider.CONTENT_URI, values);
         Snackbar snackbar = Snackbar.make(view,"New Gallery created",Snackbar.LENGTH_SHORT);
@@ -168,7 +171,6 @@ public class GalleryActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
-
         switch (id){
             case R.id.goBack:
                 Intent mainMenu = new Intent(getApplicationContext(), MainMenu.class);
@@ -177,11 +179,20 @@ public class GalleryActivity extends AppCompatActivity
             case R.id.allGallery:
                 makeQuery(0);
                 break;
-            case R.id.sortTitle:
+            case R.id.allRanked:
                 makeQuery(1);
                 break;
-            case R.id.sortArtist:
+            case R.id.allNotRanked:
                 makeQuery(2);
+                break;
+            case R.id.sortArtist:
+                makeQuery(3);
+                break;
+            case R.id.sortTitle:
+                makeQuery(4);
+                break;
+            case R.id.sortRank:
+                makeQuery(5);
                 break;
 
         }
@@ -216,27 +227,68 @@ public class GalleryActivity extends AppCompatActivity
         String groupBy = null;
         String having = null;
         String orderBy = null;
-        String limit = null;
-        String selection = null;
+        String where = null;
         String[] selectionArgs = null;
 
         switch (index){
             case 0:
-                // Show all and ordering by rank default
-                orderBy = MuseumDBOpenHelper.DB_KEY_RANK + " desc";
+                // Show all nothing is required here as this is only a select all statement
+                this.selected = 1;
                 break;
             case 1:
-                // Order paintings by title alphabetically
-                orderBy = MuseumDBOpenHelper.DB_KEY_TITLE + " asc";
+                where =  MuseumDBOpenHelper.DB_KEY_RANK + " != ?";
+                selectionArgs = new String[]{"0"};
+                this.selected = 2;
                 break;
             case 2:
-                orderBy = MuseumDBOpenHelper.DB_KEY_ARTIST + " asc";
+                where =  MuseumDBOpenHelper.DB_KEY_RANK + " = ?";
+                selectionArgs = new String[]{"0"};
+                this.selected = 3;
                 break;
             case 3:
+                if(this.selected == 1){
+                    orderBy = MuseumDBOpenHelper.DB_KEY_ARTIST + " asc";
+                } else if(this.selected ==2){
+                    where =  MuseumDBOpenHelper.DB_KEY_RANK + " != ?";
+                    selectionArgs = new String[]{"0"};
+                    orderBy = MuseumDBOpenHelper.DB_KEY_ARTIST + " asc";
+                } else if(this.selected ==3){
+                    where =  MuseumDBOpenHelper.DB_KEY_RANK + " = ?";
+                    selectionArgs = new String[]{"0"};
+                    orderBy = MuseumDBOpenHelper.DB_KEY_ARTIST + " asc";
+                }
 
                 break;
+            case 4:
+                if(this.selected == 1){
+                    orderBy = MuseumDBOpenHelper.DB_KEY_TITLE + " asc";
+                } else if(this.selected ==2){
+                    where =  MuseumDBOpenHelper.DB_KEY_RANK + " != ?";
+                    selectionArgs = new String[]{"0"};
+                    orderBy = MuseumDBOpenHelper.DB_KEY_TITLE + " asc";
+                } else if(this.selected ==3){
+                    where =  MuseumDBOpenHelper.DB_KEY_RANK + " = ?";
+                    selectionArgs = new String[]{"0"};
+                    orderBy = MuseumDBOpenHelper.DB_KEY_TITLE + " asc";
+                }
+                break;
+            case 5:
+                if(this.selected == 1){
+                    orderBy = MuseumDBOpenHelper.DB_KEY_RANK + " desc";
+                } else if(this.selected ==2){
+                    where =  MuseumDBOpenHelper.DB_KEY_RANK + " != ?";
+                    selectionArgs = new String[]{"0"};
+                    orderBy = MuseumDBOpenHelper.DB_KEY_RANK + " desc";
+                } else if(this.selected ==3){
+                    where =  MuseumDBOpenHelper.DB_KEY_RANK + " = ?";
+                    selectionArgs = new String[]{"0"};
+                    orderBy =MuseumDBOpenHelper.DB_KEY_RANK + " desc";
+                    Toast.makeText(this, "No rank to order", Toast.LENGTH_SHORT).show();
+
+                }
+                break;
             default:
-                selection = null;
+                where = null;
                 selectionArgs = null;
                 break;
         }
@@ -244,7 +296,7 @@ public class GalleryActivity extends AppCompatActivity
         Cursor cursor = database.query(
                 Database_table,
                 columns,
-                selection,
+                where,
                 selectionArgs,
                 groupBy,
                 having,

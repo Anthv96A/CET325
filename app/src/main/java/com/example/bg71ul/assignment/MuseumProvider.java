@@ -13,7 +13,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 /**
- * Created by antho on 07/12/2017.
+ * Created by Anthony Vest on 07/12/2017.
  */
 
 public class MuseumProvider extends ContentProvider {

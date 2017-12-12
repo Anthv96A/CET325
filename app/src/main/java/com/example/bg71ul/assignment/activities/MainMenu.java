@@ -84,7 +84,8 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
 
         switch (item.getItemId()){
             case R.id.ticket_prices:{
-                Toast.makeText(this, "Ticket price intent", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this,PricesActivity.class);
+                startActivity(intent);
                 return true;
             }
 
