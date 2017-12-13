@@ -1,7 +1,9 @@
 package com.example.bg71ul.assignment.activities;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,21 +11,29 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.example.bg71ul.assignment.JSONCurrencyTask;
 import com.example.bg71ul.assignment.MuseumDBOpenHelper;
 import com.example.bg71ul.assignment.MuseumProvider;
 import com.example.bg71ul.assignment.R;
 import com.example.bg71ul.assignment.activities.MainMenu;
+import com.example.bg71ul.assignment.models.CurrencyRate;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Currency;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SplashScreen extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -52,17 +62,42 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                     if(ContextCompat.checkSelfPermission(getApplicationContext(),
                             android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
 
-                        Intent mainMenuIntent = new Intent(getApplicationContext(), MainMenu.class);
-                        startActivity(mainMenuIntent);
-                        finish();
-                    }
+                        if(getContentResolver().query(MuseumProvider.CONTENT_URI,null,null,null,null).getCount() != 0){
 
+                            SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                            String localCurrency = mSharedPreferences.getString("localCurrency","DEFAULT");
+                            String yourCurrency = mSharedPreferences.getString("yourCurrency","DEFAULT");
+
+
+                            JSONCurrencyTask jsonCurrencyTask = new JSONCurrencyTask();
+
+                            List<CurrencyRate> localCurrencyRates = new ArrayList<CurrencyRate>();
+
+
+                            for(CurrencyRate cr: jsonCurrencyTask.fetchCurrencyRates(
+                                    getResources().getStringArray(R.array.currencies),
+                                    localCurrency) ){
+                                Log.d("For each cr type ", cr.getCurrencyType());
+                                Log.d("For each cr ", String.valueOf(cr.getCurrencyRate()));
+                            }
+
+                            localCurrencyRates.addAll(jsonCurrencyTask.fetchCurrencyRates(
+                                    getResources().getStringArray(R.array.currencies),
+                                    localCurrency));
+
+
+                            Intent mainMenuIntent = new Intent(getApplicationContext(), MainMenu.class);
+                            mainMenuIntent.putExtra("localCurrencyRates", (Serializable) localCurrencyRates);
+                            startActivity(mainMenuIntent);
+                            finish();
+
+                        }
+                    }
 
                 } catch (Exception e){
                     e.printStackTrace();
-
                 }
-
 
             }
         }, DURATION );
@@ -99,13 +134,37 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    if(getContentResolver().query(MuseumProvider.CONTENT_URI,null,null,null,null).getCount() == 0){
-                        initialiseDatabase();
-                    }
 
-                    Intent mainMenuIntent = new Intent(getApplicationContext(), MainMenu.class);
-                    startActivity(mainMenuIntent);
-                    finish();
+
+
+                    if(getContentResolver().query(MuseumProvider.CONTENT_URI,null,null,null,null).getCount() == 0) {
+                        initialiseDatabase();
+
+                        // On start up, set up the default currencies
+                        PreferenceManager.getDefaultSharedPreferences(this).edit()
+                                .putString("localCurrency", "EUR").apply();
+
+                        PreferenceManager.getDefaultSharedPreferences(this).edit()
+                                .putString("yourCurrency", "GBP").apply();
+
+
+                        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+                        String localCurrency = mSharedPreferences.getString("localCurrency","DEFAULT");
+
+                        JSONCurrencyTask jsonCurrencyTask = new JSONCurrencyTask();
+
+                        List<CurrencyRate> localCurrencyRates = new ArrayList<CurrencyRate>();
+
+                        localCurrencyRates.addAll(jsonCurrencyTask.fetchCurrencyRates(
+                                getResources().getStringArray(R.array.currencies),
+                                localCurrency));
+
+                        Intent mainMenuIntent = new Intent(getApplicationContext(), MainMenu.class);
+                        mainMenuIntent.putExtra("localCurrencyRates", (Serializable) localCurrencyRates);
+                        startActivity(mainMenuIntent);
+                        finish();
+                    }
 
                 } else {
                     Toast.makeText(this, "Permissions Denied, must accept to continue", Toast.LENGTH_LONG).show();
@@ -232,11 +291,12 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                 1799,
                 R.drawable.sabine
         );
+
     }
 
     private void createGallery(String artist,String title,String description, String room, double rank, int year, int pictureId) {
 
-        int notEditable = 0;
+        final int notEditable = 0;
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), pictureId);
         bitmap = Bitmap.createScaledBitmap(bitmap,600,400,false);

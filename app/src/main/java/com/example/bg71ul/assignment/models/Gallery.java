@@ -1,4 +1,13 @@
-package com.example.bg71ul.assignment;
+package com.example.bg71ul.assignment.models;
+
+import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,5 +26,6 @@ public class Gallery {
     private String description;
     private String rank;
     private String year;
+
 
 }

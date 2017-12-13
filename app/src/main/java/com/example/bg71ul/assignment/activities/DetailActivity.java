@@ -20,7 +20,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bg71ul.assignment.Gallery;
+import com.example.bg71ul.assignment.models.Gallery;
 import com.example.bg71ul.assignment.MuseumDBOpenHelper;
 import com.example.bg71ul.assignment.MuseumProvider;
 import com.example.bg71ul.assignment.R;

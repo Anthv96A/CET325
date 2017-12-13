@@ -31,7 +31,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.bg71ul.assignment.Gallery;
+import com.example.bg71ul.assignment.models.Gallery;
 import com.example.bg71ul.assignment.MuseumCursorAdapter;
 import com.example.bg71ul.assignment.MuseumDBOpenHelper;
 import com.example.bg71ul.assignment.MuseumProvider;
@@ -185,7 +185,7 @@ public class GalleryActivity extends AppCompatActivity
             case R.id.allNotRanked:
                 makeQuery(2);
                 break;
-            case R.id.sortArtist:
+            case R.id.sortArtistAndTitle:
                 makeQuery(3);
                 break;
             case R.id.sortTitle:
@@ -236,23 +236,28 @@ public class GalleryActivity extends AppCompatActivity
                 this.selected = 1;
                 break;
             case 1:
+                // Select all from database who have been ranked
                 where =  MuseumDBOpenHelper.DB_KEY_RANK + " != ?";
                 selectionArgs = new String[]{"0"};
                 this.selected = 2;
                 break;
             case 2:
+                // Select all from database who have NOT been ranked
                 where =  MuseumDBOpenHelper.DB_KEY_RANK + " = ?";
                 selectionArgs = new String[]{"0"};
                 this.selected = 3;
                 break;
             case 3:
                 if(this.selected == 1){
-                    orderBy = MuseumDBOpenHelper.DB_KEY_ARTIST + " asc";
+                    // If all is selected, then order by artist and title
+                    orderBy = MuseumDBOpenHelper.DB_KEY_ARTIST + " asc, " + MuseumDBOpenHelper.DB_KEY_TITLE + " asc";
                 } else if(this.selected ==2){
+                    // If ranked is selected, then order by artist and title
                     where =  MuseumDBOpenHelper.DB_KEY_RANK + " != ?";
                     selectionArgs = new String[]{"0"};
                     orderBy = MuseumDBOpenHelper.DB_KEY_ARTIST + " asc";
                 } else if(this.selected ==3){
+                    // If NOT rank is selected, then order by artist and title
                     where =  MuseumDBOpenHelper.DB_KEY_RANK + " = ?";
                     selectionArgs = new String[]{"0"};
                     orderBy = MuseumDBOpenHelper.DB_KEY_ARTIST + " asc";
@@ -261,12 +266,15 @@ public class GalleryActivity extends AppCompatActivity
                 break;
             case 4:
                 if(this.selected == 1){
+                    // If all is selected, then order by title
                     orderBy = MuseumDBOpenHelper.DB_KEY_TITLE + " asc";
                 } else if(this.selected ==2){
+                    // If ranked is selected, then order by title
                     where =  MuseumDBOpenHelper.DB_KEY_RANK + " != ?";
                     selectionArgs = new String[]{"0"};
                     orderBy = MuseumDBOpenHelper.DB_KEY_TITLE + " asc";
                 } else if(this.selected ==3){
+                    // If NOT ranked is selected, then order by title
                     where =  MuseumDBOpenHelper.DB_KEY_RANK + " = ?";
                     selectionArgs = new String[]{"0"};
                     orderBy = MuseumDBOpenHelper.DB_KEY_TITLE + " asc";
@@ -274,20 +282,23 @@ public class GalleryActivity extends AppCompatActivity
                 break;
             case 5:
                 if(this.selected == 1){
+                    // If all is selected, then order by rank descending
                     orderBy = MuseumDBOpenHelper.DB_KEY_RANK + " desc";
                 } else if(this.selected ==2){
+                    // If ranked is selected, then order by rank descending
                     where =  MuseumDBOpenHelper.DB_KEY_RANK + " != ?";
                     selectionArgs = new String[]{"0"};
                     orderBy = MuseumDBOpenHelper.DB_KEY_RANK + " desc";
                 } else if(this.selected ==3){
+                    // If NOT ranked is selected, then order by rank descending
                     where =  MuseumDBOpenHelper.DB_KEY_RANK + " = ?";
                     selectionArgs = new String[]{"0"};
                     orderBy =MuseumDBOpenHelper.DB_KEY_RANK + " desc";
                     Toast.makeText(this, "No rank to order", Toast.LENGTH_SHORT).show();
-
                 }
                 break;
             default:
+                // default is select all from database
                 where = null;
                 selectionArgs = null;
                 break;
@@ -304,6 +315,7 @@ public class GalleryActivity extends AppCompatActivity
 
         int result = cursor.getCount();
 
+        // make sure database is not empty, otherwise set the adapter to null
         if(result == 0 || result < 1){
             list.setAdapter(null);
         } else{

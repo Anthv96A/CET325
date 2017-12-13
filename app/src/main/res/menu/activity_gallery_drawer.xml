@@ -26,8 +26,8 @@
     <item android:title="Order By">
         <menu>
             <item
-                android:id="@+id/sortArtist"
-                android:title="Artist" />
+                android:id="@+id/sortArtistAndTitle"
+                android:title="Artist and Title" />
             <item
                 android:id="@+id/sortTitle"
                 android:title="Title" />

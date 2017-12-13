@@ -1,5 +1,8 @@
 package com.example.bg71ul.assignment.activities;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,13 +26,22 @@ import android.widget.Toast;
 
 import com.example.bg71ul.assignment.CurrencyConverter;
 import com.example.bg71ul.assignment.R;
+import com.example.bg71ul.assignment.models.CurrencyRate;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PricesActivity extends AppCompatActivity {
 
 
 
-    public static String localCurrency = "EUR";
-    public static String yourCurrency = "GBP";
+    public static String localCurrency;
+    public static String yourCurrency;
+    public static List<CurrencyRate> currencyRates = new ArrayList<>();
+    public static double rate = 0.8;
+
+    private SharedPreferences currencyPreferences = null;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -52,6 +65,17 @@ public class PricesActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Intent intent = getIntent();
+
+        currencyRates = (List<CurrencyRate>) intent.getSerializableExtra("localCurrencyRates");
+        Log.d("Prices Activity", currencyRates.toString());
+
+
+        currencyPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        yourCurrency = this.currencyPreferences.getString("yourCurrency","DEFAULT");
+        localCurrency = this.currencyPreferences.getString("localCurrency","DEFAULT");
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -118,21 +142,42 @@ public class PricesActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
+            DecimalFormat df = new DecimalFormat();
+
             CurrencyConverter currencyConverter = new CurrencyConverter();
 
             View rootView = inflater.inflate(R.layout.fragment_prices, container, false);
-            //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+
+            TextView localCurrencyTextView = (TextView) rootView.findViewById(R.id.localRates);
+            localCurrencyTextView.setText(localCurrency);
+
+            TextView yourCurrencyTextView = (TextView) rootView.findViewById(R.id.yourCurrency);
+            yourCurrencyTextView.setText(yourCurrency);
+
+            if(yourCurrency.equals("GBP")){
+                df = new DecimalFormat("'£'0.00");
+            }
+
+            if(yourCurrency.equals("EUR")){
+                df = new DecimalFormat("'€'0.00");
+            }
+
+            if(yourCurrency.equals("USD")){
+                df = new DecimalFormat("'$'0.00");
+            }
 
 
             if(getArguments().getInt(ARG_SECTION_NUMBER) == 1){
-               // textView.setText("Student prices");
-               double totalprice = currencyConverter.calculatePrices(localCurrency, yourCurrency);
+                double totalprice = currencyConverter.calculateStudentPrices(localCurrency, yourCurrency,rate, currencyRates);
                 TextView pricesTextView = (TextView) rootView.findViewById(R.id.priceCost);
-                pricesTextView.setText("£"+ totalprice);
+                pricesTextView.setText(String.valueOf(df.format(totalprice)));
             }
 
             if(getArguments().getInt(ARG_SECTION_NUMBER) == 2){
                // textView.setText("Adult prices");
+                double totalprice = currencyConverter.calculatePrices(localCurrency, yourCurrency,rate,currencyRates);
+                TextView pricesTextView = (TextView) rootView.findViewById(R.id.priceCost);
+                pricesTextView.setText(String.valueOf(df.format(totalprice)));
             }
 
             if(getArguments().getInt(ARG_SECTION_NUMBER) == 3){

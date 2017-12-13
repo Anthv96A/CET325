@@ -2,11 +2,13 @@ package com.example.bg71ul.assignment.activities;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.bg71ul.assignment.R;
 
@@ -18,13 +20,27 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
     private Spinner spinner = null;
     private ArrayAdapter currencyAdapter = null;
     private SharedPreferences currencyPreferences = null;
+    private int selectedPosition;
+    private String yourCurrency;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency);
 
-        this.currencyPreferences = getPreferences(0);
+
+        this.currencyPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        this.yourCurrency = currencyPreferences.getString("yourCurrency", "DEFAULT");
+
+        String[] currencies = getResources().getStringArray(R.array.currencies);
+
+        for(int i =0; i < currencies.length; i++){
+
+            if(currencies[i].equals(this.yourCurrency)){
+                this.selectedPosition = i;
+            }
+        }
 
         this.spinner = (Spinner) findViewById(R.id.currency_selection);
         this.spinner.setOnItemSelectedListener(this);
@@ -34,35 +50,14 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
         this.currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         this.spinner.setAdapter(this.currencyAdapter);
-        this.spinner.setSelection(this.currencyPreferences.getInt("currencySelection",0));
+        this.spinner.setSelection(this.selectedPosition);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-        SharedPreferences.Editor editor = getPreferences(0).edit();
-        int selectedItem = i;
-
-        try{
-
-            switch (selectedItem){
-                case 0:
-                    editor.putInt("currencySelection", selectedItem);
-                    editor.commit();
-                    break;
-                case 1:
-                    editor.putInt("currencySelection", selectedItem);
-                    editor.commit();
-                    break;
-                case 2:
-                    editor.putInt("currencySelection", selectedItem);
-                    editor.commit();
-                    break;
-            }
-
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
+                .putString("yourCurrency", this.spinner.getSelectedItem().toString()).apply();
 
     }
 
