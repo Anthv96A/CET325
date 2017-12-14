@@ -4,7 +4,9 @@
     tools:context=".DetailActivity">
     <item android:id="@+id/gallery_options"
         android:title="@string/edit_gallery"
+        android:icon="@drawable/ic_create_white_24dp"
+        android:logo="@drawable/ic_create_white_24dp"
         android:orderInCategory="1"
-        app:showAsAction="never">
+        app:showAsAction="ifRoom">
     </item>
 </menu>

@@ -64,10 +64,10 @@ public class PricesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prices);
 
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        ticketPrice = Double.parseDouble(getResources().getString(R.string.ticket_admission_price));
+        
 
         Intent intent = getIntent();
 
@@ -78,6 +78,10 @@ public class PricesActivity extends AppCompatActivity {
         currencyPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         yourCurrency = this.currencyPreferences.getString("yourCurrency","DEFAULT");
         localCurrency = this.currencyPreferences.getString("localCurrency","DEFAULT");
+
+        String ticketPriceString = this.currencyPreferences.getString("ticketPrice", "DEFAULT");
+
+        ticketPrice = Double.parseDouble(ticketPriceString);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.

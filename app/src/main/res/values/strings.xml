@@ -6,7 +6,9 @@
     <string name="copyright">Copyright © 2017 </string>
 
     <!--Splash Screen-->
+    <!--Splash Screen-->
     <string name="please_wait">Please wait while the application loads...</string>
+
 
     <!--Main Menu Strings, for buttons, menus, text views etc.-->
     <string name="btn_view_gallery">View Gallery</string>
@@ -42,6 +44,9 @@
     <string name="enter_year">Enter Year</string>
 
     <string name="delete_gallery">You sure you want to delete this gallery?</string>
+
+    <!--Ticket price-->
+    <string name="ticket_price">Change Ticket Price</string>
 
 
     <!--Detail Activity-->

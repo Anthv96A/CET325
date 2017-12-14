@@ -147,6 +147,9 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                         PreferenceManager.getDefaultSharedPreferences(this).edit()
                                 .putString("yourCurrency", "EUR").apply();
 
+                        PreferenceManager.getDefaultSharedPreferences(this).edit()
+                                .putString("ticketPrice", "20").apply();
+
 
                         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 

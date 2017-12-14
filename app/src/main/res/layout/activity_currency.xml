@@ -27,9 +27,10 @@
 
     <Spinner
         android:id="@+id/currency_selection"
-        android:layout_width="168dp"
-        android:textSize="20sp"
-        android:textColor="@color/textWhite"
+        android:layout_width="128dp"
+        android:textSize="10sp"
+        android:alpha="1"
+        android:textColor="@color/blackText"
         android:layout_gravity="center"
         android:ellipsize="marquee"
         android:gravity="center"
@@ -42,8 +43,8 @@
         app:layout_constraintLeft_toLeftOf="@+id/imageView"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.199"
-        app:layout_constraintHorizontal_bias="0.08" />
+        app:layout_constraintVertical_bias="0.18"
+        app:layout_constraintHorizontal_bias="0.091" />
 
     <TextView
         android:id="@+id/textSelectCurrency"
@@ -55,14 +56,14 @@
         android:layout_marginTop="8dp"
         android:text="@string/selected_currency"
         android:textColor="@color/textWhite"
-        android:textSize="30sp"
-        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.16"
+        app:layout_constraintHorizontal_bias="0.111"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.060000002" />
+        app:layout_constraintVertical_bias="0.110000014" />
 
 
 </android.support.constraint.ConstraintLayout>

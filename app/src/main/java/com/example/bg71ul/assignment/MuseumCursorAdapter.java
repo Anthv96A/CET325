@@ -41,19 +41,9 @@ public class MuseumCursorAdapter extends CursorAdapter{
         String title = cursor.getString(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_TITLE));
         String artist = cursor.getString(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_ARTIST));
         String room = cursor.getString(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_ROOM));
-        String description = cursor.getString(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_DESCRIPTION));
         String ranking = cursor.getString(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_RANK));
         String year = cursor.getString(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_YEAR));
 
-
-        if(description == null || description.isEmpty()){
-            description = "No description is set";
-        } else {
-            if(description.length() > 120){
-                description = description.substring(0,119);
-                description += "...";
-            }
-        }
 
         float rank;
 
@@ -66,7 +56,6 @@ public class MuseumCursorAdapter extends CursorAdapter{
 
         TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
         TextView artistTextView = (TextView) view.findViewById(R.id.nameArtistView);
-     //   TextView descriptionTextView = (TextView) view.findViewById(R.id.descriptionTextView);
         TextView roomTextView = (TextView) view.findViewById(R.id.roomTextView);
         RatingBar ratingBar = (RatingBar) view.findViewById(R.id.ratingBar) ;
         ImageView imageView = (ImageView) view.findViewById(R.id.imageDocIcon);
@@ -92,7 +81,6 @@ public class MuseumCursorAdapter extends CursorAdapter{
         artistTextView.setText("Artist: " + artist);
         roomTextView.setText("Room: " + room);
         yearView.setText("The year of completion: " + year);
-    //    descriptionTextView.setText(description);
         ratingBar.setRating(rank);
 
     }
