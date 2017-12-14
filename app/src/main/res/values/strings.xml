@@ -55,6 +55,9 @@
     <!--Prices Activity-->
     <string name="title_activity_prices">Admission Prices</string>
 
+    <!--Ticket price-->
+    <string name="ticket_admission_price">20</string>
+
 
 
 </resources>

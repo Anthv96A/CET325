@@ -13,9 +13,9 @@ import java.util.List;
 public class CurrencyConverter {
 
 
-    public double calculatePrices(String localCurrency, String yourCurrency, double rate, List<CurrencyRate> rates){
+    public double calculatePrices(String localCurrency, String yourCurrency, List<CurrencyRate> rates, double ticketPrice){
 
-        final double admissionPrice = 10;
+        final double admissionPrice = ticketPrice;
 
         float exchangeRate = 0;
 
@@ -42,9 +42,9 @@ public class CurrencyConverter {
 
     }
 
-    public double calculateStudentPrices(String localCurrency, String yourCurrency, double rate, List<CurrencyRate> rates){
+    public double calculateStudentPrices(String localCurrency, String yourCurrency, List<CurrencyRate> rates, double ticketPrice){
 
-        final double admissionPrice = 10;
+        final double admissionPrice = ticketPrice;
         final double studentDiscount = 0.30;
 
         float exchangeRate = 0;

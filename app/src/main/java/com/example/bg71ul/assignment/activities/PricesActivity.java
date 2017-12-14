@@ -39,6 +39,7 @@ public class PricesActivity extends AppCompatActivity {
     public static String localCurrency;
     public static String yourCurrency;
     public static List<CurrencyRate> currencyRates = new ArrayList<>();
+    public static double ticketPrice = 0;
     public static double rate = 0.8;
 
     private SharedPreferences currencyPreferences = null;
@@ -65,6 +66,8 @@ public class PricesActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ticketPrice = Double.parseDouble(getResources().getString(R.string.ticket_admission_price));
 
         Intent intent = getIntent();
 
@@ -147,14 +150,14 @@ public class PricesActivity extends AppCompatActivity {
 
             if(getArguments().getInt(ARG_SECTION_NUMBER) == 1){
                 // Student Tab
-                double totalprice = currencyConverter.calculateStudentPrices(localCurrency, yourCurrency,rate, currencyRates);
+                double totalprice = currencyConverter.calculateStudentPrices(localCurrency, yourCurrency, currencyRates, ticketPrice);
                 TextView pricesTextView = (TextView) rootView.findViewById(R.id.priceCost);
                 pricesTextView.setText(String.valueOf(df.format(totalprice)));
             }
 
             if(getArguments().getInt(ARG_SECTION_NUMBER) == 2){
                 // Adult Tab
-                double totalprice = currencyConverter.calculatePrices(localCurrency, yourCurrency,rate,currencyRates);
+                double totalprice = currencyConverter.calculatePrices(localCurrency, yourCurrency,currencyRates, ticketPrice);
                 TextView pricesTextView = (TextView) rootView.findViewById(R.id.priceCost);
                 pricesTextView.setText(String.valueOf(df.format(totalprice)));
             }
@@ -166,8 +169,6 @@ public class PricesActivity extends AppCompatActivity {
 
             }
 
-
-          //  textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
     }
