@@ -5,6 +5,8 @@
     <string name="app_name">Lourve Museum </string>
     <string name="copyright">Copyright © 2017 </string>
 
+    <!--Splash Screen-->
+    <string name="please_wait">Please wait while the application loads...</string>
 
     <!--Main Menu Strings, for buttons, menus, text views etc.-->
     <string name="btn_view_gallery">View Gallery</string>

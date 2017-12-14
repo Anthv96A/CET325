@@ -237,6 +237,7 @@ public class DetailActivity extends AppCompatActivity {
         TextView roomDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogRoomInput);
 
         edited = (RatingBar) getEditDialog.findViewById(R.id.ratingBarAny);
+        edited.setRating(getRank());
 
         artistDialogTextview.setText(editGallery.getArtist());
         titleDialogTextview.setText(editGallery.getTitle());

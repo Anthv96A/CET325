@@ -114,7 +114,7 @@
         android:layout_height="wrap_content"
         android:text="@string/main_menu"
         android:textColor="@color/textWhite"
-        android:textSize="24dp"
+        android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
         android:layout_marginRight="8dp"

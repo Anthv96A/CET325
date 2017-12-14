@@ -66,7 +66,7 @@ public class MuseumCursorAdapter extends CursorAdapter{
 
         TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
         TextView artistTextView = (TextView) view.findViewById(R.id.nameArtistView);
-        TextView descriptionTextView = (TextView) view.findViewById(R.id.descriptionTextView);
+     //   TextView descriptionTextView = (TextView) view.findViewById(R.id.descriptionTextView);
         TextView roomTextView = (TextView) view.findViewById(R.id.roomTextView);
         RatingBar ratingBar = (RatingBar) view.findViewById(R.id.ratingBar) ;
         ImageView imageView = (ImageView) view.findViewById(R.id.imageDocIcon);
@@ -92,7 +92,7 @@ public class MuseumCursorAdapter extends CursorAdapter{
         artistTextView.setText("Artist: " + artist);
         roomTextView.setText("Room: " + room);
         yearView.setText("The year of completion: " + year);
-        descriptionTextView.setText(description);
+    //    descriptionTextView.setText(description);
         ratingBar.setRating(rank);
 
     }

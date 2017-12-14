@@ -36,7 +36,9 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
 
         Intent intent = getIntent();
 
-        this.currencyRates = (List<CurrencyRate>) intent.getSerializableExtra("localCurrencyRates");
+        if(intent.getSerializableExtra("localCurrencyRates") != null){
+            this.currencyRates = (List<CurrencyRate>) intent.getSerializableExtra("localCurrencyRates");
+        }
 
         Log.d("Currency rates", this.currencyRates.toString());
 

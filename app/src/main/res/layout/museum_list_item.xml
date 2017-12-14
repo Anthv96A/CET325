@@ -7,92 +7,87 @@
     android:padding="4dp"
     android:divider="@color/blackText">
 
-    <LinearLayout
+
+    <RelativeLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/imageDocIcon"
-            android:layout_width="160dp"
-            android:layout_height="140dp" />
+            android:layout_width="140dp"
+            android:layout_height="120dp" />
 
         <TextView
-            android:id="@+id/descriptionTextView"
-            android:layout_width="match_parent"
-            android:layout_height="118dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
             android:layout_marginTop="5dp"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="12dp"
             android:layout_toEndOf="@+id/imageDocIcon"
             android:layout_toRightOf="@+id/imageDocIcon"
-            android:text="Description"
+            android:text="Title"
             android:textColor="@android:color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold"/>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/nameArtistView"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="12dp"
+            android:layout_toEndOf="@+id/imageDocIcon"
+            android:layout_toRightOf="@+id/imageDocIcon"
+            android:layout_below="@+id/titleTextView"
+            android:text="Artist"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
 
-    <RatingBar
-        android:id="@+id/ratingBar"
-        style="?android:attr/ratingBarStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:isIndicator="true"
-        android:numStars="5"
-        android:rating="3"
-        android:stepSize="0.5"
-        android:theme="@style/RatingBar" />
+        <TextView
+            android:id="@+id/roomTextView"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="12sp"
+            android:text="Room"
+            android:textSize="12sp"
+            android:textColor="@color/blackText"
+            android:layout_toEndOf="@+id/imageDocIcon"
+            android:layout_toRightOf="@+id/imageDocIcon"
+            android:layout_below="@+id/nameArtistView"/>
 
-    <TextView
-        android:id="@+id/titleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="15dp"
-        android:layout_toEndOf="@+id/imageDocIcon"
-        android:layout_toRightOf="@+id/imageDocIcon"
-        android:text="Title"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        <RatingBar
+            android:id="@+id/ratingBar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageDocIcon"
+            android:layout_marginLeft="5dp"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:rating="3"
+            android:stepSize="0.5"
+            android:theme="@style/RatingBar" />
 
-    <TextView
-        android:id="@+id/nameArtistView"
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="15dp"
-        android:layout_toEndOf="@+id/imageDocIcon"
-        android:layout_toRightOf="@+id/imageDocIcon"
-        android:layout_below="@+id/titleTextView"
-        android:text="Artist"
-        android:textColor="@android:color/black"
-        android:textSize="15sp" />
-    <TextView
-        android:id="@+id/roomTextView"
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="15dp"
-        android:text="Room"
-        android:textColor="@color/blackText"
-        android:layout_toEndOf="@+id/imageDocIcon"
-        android:layout_toRightOf="@+id/imageDocIcon"
-        android:layout_below="@+id/nameArtistView"/>
-    <TextView
-        android:id="@+id/yearTextView"
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="15dp"
-        android:text="Year"
-        android:textColor="@color/blackText"
-        android:layout_toEndOf="@+id/imageDocIcon"
-        android:layout_toRightOf="@+id/imageDocIcon"
-        android:layout_below="@+id/roomTextView"/>
+        <TextView
+            android:id="@+id/yearTextView"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="12sp"
+            android:text="Year"
+            android:textSize="12sp"
+            android:textColor="@color/blackText"
+            android:layout_toEndOf="@+id/imageDocIcon"
+            android:layout_toRightOf="@+id/imageDocIcon"
+            android:layout_below="@+id/roomTextView"/>
+
+
+    </RelativeLayout>
+
 </LinearLayout>
+
