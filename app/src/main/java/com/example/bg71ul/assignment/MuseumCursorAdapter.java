@@ -46,7 +46,6 @@ public class MuseumCursorAdapter extends CursorAdapter{
         String year = cursor.getString(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_YEAR));
 
 
-
         if(description == null || description.isEmpty()){
             description = "No description is set";
         } else {

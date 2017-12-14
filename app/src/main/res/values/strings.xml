@@ -51,8 +51,10 @@
     <string name="edit_gallery">Edit Gallery</string>
     <string name="edit">Would you like to edit?</string>
     <string name="rate_gallery">Rate Gallery</string>
-    <string name="title_activity_prices">PricesActivity</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!--Prices Activity-->
+    <string name="title_activity_prices">Admission Prices</string>
+
 
 
 </resources>

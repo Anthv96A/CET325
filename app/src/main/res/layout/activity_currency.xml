@@ -9,21 +9,21 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="405dp"
+        android:layout_width="wrap_content"
         android:layout_height="561dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="4dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="0dp"
         android:background="@drawable/background"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.378"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
+        app:layout_constraintVertical_bias="0.82"
+        app:layout_constraintHorizontal_bias="0.52" />
 
     <Spinner
         android:id="@+id/currency_selection"
@@ -42,26 +42,27 @@
         app:layout_constraintLeft_toLeftOf="@+id/imageView"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="@+id/imageView"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.39" />
+        app:layout_constraintVertical_bias="0.199"
+        app:layout_constraintHorizontal_bias="0.08" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textSelectCurrency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:text="@string/selected_currency"
+        android:textColor="@color/textWhite"
         android:textSize="30dp"
         android:textStyle="bold"
-        android:textColor="@color/textWhite"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintHorizontal_bias="0.16"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.060000002" />
 
 
 </android.support.constraint.ConstraintLayout>

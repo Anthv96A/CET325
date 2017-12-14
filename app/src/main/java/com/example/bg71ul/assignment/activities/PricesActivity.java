@@ -91,28 +91,6 @@ public class PricesActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_prices, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -168,23 +146,23 @@ public class PricesActivity extends AppCompatActivity {
 
 
             if(getArguments().getInt(ARG_SECTION_NUMBER) == 1){
+                // Student Tab
                 double totalprice = currencyConverter.calculateStudentPrices(localCurrency, yourCurrency,rate, currencyRates);
                 TextView pricesTextView = (TextView) rootView.findViewById(R.id.priceCost);
                 pricesTextView.setText(String.valueOf(df.format(totalprice)));
             }
 
             if(getArguments().getInt(ARG_SECTION_NUMBER) == 2){
-               // textView.setText("Adult prices");
+                // Adult Tab
                 double totalprice = currencyConverter.calculatePrices(localCurrency, yourCurrency,rate,currencyRates);
                 TextView pricesTextView = (TextView) rootView.findViewById(R.id.priceCost);
                 pricesTextView.setText(String.valueOf(df.format(totalprice)));
             }
 
             if(getArguments().getInt(ARG_SECTION_NUMBER) == 3){
-               // textView.setText("Under 18 prices");
-
+                // Under 18's tab
                 TextView pricesTextView = (TextView) rootView.findViewById(R.id.priceCost);
-                pricesTextView.setText("Free");
+                pricesTextView.setText(String.valueOf(df.format(0)));
 
             }
 
