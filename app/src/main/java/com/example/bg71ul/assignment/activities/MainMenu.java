@@ -79,7 +79,9 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 break;
             case R.id.btn_google_maps:
-                Toast.makeText(this, "Google Maps Intent", Toast.LENGTH_SHORT).show();
+                intent = new Intent(getApplicationContext(), LouvreMapsActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 break;
             case R.id.btn_currency:
                 intent = new Intent(getApplicationContext(),CurrencyActivity.class);

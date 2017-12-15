@@ -12,7 +12,7 @@
 
     <!--Main Menu Strings, for buttons, menus, text views etc.-->
     <string name="btn_view_gallery">View Gallery</string>
-    <string name="btn_view_google_maps">Find us on Google Maps!</string>
+    <string name="btn_view_google_maps">Find places near you!</string>
     <string name="btn_set_your_currency">Set your currency</string>
     <string name="menu_information_prices">Information Prices</string>
     <string name="main_menu">Main Menu</string>
@@ -64,7 +64,10 @@
 
     <!--Ticket price-->
     <string name="ticket_admission_price">20</string>
+    <string name="title_activity_louvre_maps">Map</string>
 
+    <!--Google Maps Get places API KEY-->
+    <string name="google_places_api_key">AIzaSyBU58QUYxRfxD3zYgIy5asnxV-96mYVjYk</string>
 
 
 </resources>
