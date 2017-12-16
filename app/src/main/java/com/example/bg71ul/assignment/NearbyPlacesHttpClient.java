@@ -14,13 +14,27 @@ import java.net.URL;
 
 public class NearbyPlacesHttpClient {
 
+    private static final String GOOGLE_PLACES_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
+    private static String location;
+    private static final String distanceRadius = "&radius=10000";
+    private static String nearbyPlace;
+    private static final String sensor = "&sensor=true";
+    private static final String API_KEY = "&key=AIzaSyBU58QUYxRfxD3zYgIy5asnxV-96mYVjYk";
+    private static String finalURL;
 
-    public String getPlaces(String inputUrl){
+
+    public String getPlaces(String[] values){
         InputStream inputStream = null;
         HttpURLConnection urlConnection = null;
 
+        location = "location="+ values[0]+ ","+ values[1];
+        nearbyPlace = "&type="+ values[2];
+
+        finalURL = GOOGLE_PLACES_URL + location + distanceRadius + nearbyPlace + sensor + API_KEY;
+        Log.d("Passed url", finalURL);
+
         try {
-            urlConnection = (HttpURLConnection) (new URL(inputUrl)).openConnection();
+            urlConnection = (HttpURLConnection) (new URL(finalURL)).openConnection();
             urlConnection.connect();
 
             int response = urlConnection.getResponseCode();
@@ -36,7 +50,7 @@ public class NearbyPlacesHttpClient {
                 String line = "";
 
                 while ((line = bufferedReader.readLine()) != null){
-                        buffer.append(line);
+                    buffer.append(line);
                 }
 
                 inputStream.close();
@@ -65,4 +79,5 @@ public class NearbyPlacesHttpClient {
         return null;
 
     }
+
 }

@@ -1,5 +1,6 @@
 package com.example.bg71ul.assignment.activities;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -12,10 +13,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.bg71ul.assignment.JSONCurrencyTask;
@@ -38,8 +41,7 @@ import java.util.Set;
 public class SplashScreen extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
 
-    private static final int DURATION = 3000;
-
+    private static final int DURATION = 2000;
     private static final int WRITE_TO_EXTERNAL_STORAGE = 0;
 
 
@@ -66,31 +68,71 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
 
                             SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
+                            SharedPreferences storedRates = getSharedPreferences("rates",Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = storedRates.edit();
+
                             String localCurrency = mSharedPreferences.getString("localCurrency","DEFAULT");
-                            String yourCurrency = mSharedPreferences.getString("yourCurrency","DEFAULT");
-
-
-                            JSONCurrencyTask jsonCurrencyTask = new JSONCurrencyTask();
-
                             List<CurrencyRate> localCurrencyRates = new ArrayList<CurrencyRate>();
 
+                            try{
+                                JSONCurrencyTask jsonCurrencyTask = new JSONCurrencyTask();
+                                // Ensure the currency task completes
+                                Thread sleeperThread = new Thread();
+                                try {
+                                    sleeperThread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
 
-                            for(CurrencyRate cr: jsonCurrencyTask.fetchCurrencyRates(
-                                    getResources().getStringArray(R.array.currencies),
-                                    localCurrency) ){
-                                Log.d("For each cr type ", cr.getCurrencyType());
-                                Log.d("For each cr ", String.valueOf(cr.getCurrencyRate()));
+                                for(CurrencyRate cr: jsonCurrencyTask.fetchCurrencyRates(
+                                        getResources().getStringArray(R.array.currencies),
+                                        localCurrency) ){
+                                    Log.d("For each cr type ", cr.getCurrencyType());
+                                    Log.d("For each cr ", String.valueOf(cr.getCurrencyRate()));
+                                }
+
+                                localCurrencyRates.addAll(jsonCurrencyTask.fetchCurrencyRates(
+                                        getResources().getStringArray(R.array.currencies),
+                                        localCurrency));
+
+                                // This loops will store the current rates which comes back,
+                                // However, if the rates fail, we want to keep what we previously stored
+                                // so if the rates come back as 0.0, we will still have previous rates
+                                for(CurrencyRate rate: localCurrencyRates){
+                                    if(rate.getCurrencyType().equals("GBP")){
+                                        if(rate.getCurrencyRate() != 0.0){
+                                            editor.putString("previousGBP", rate.getCurrencyType());
+                                            editor.putFloat("previousGBPRate", rate.getCurrencyRate());
+                                            editor.apply();
+                                        }
+                                    }
+
+                                    if(rate.getCurrencyType().equals("EUR")){
+                                        if(rate.getCurrencyRate() != 0.0){
+                                            editor.putString("previousEUR", rate.getCurrencyType());
+                                            editor.putFloat("previousEURRate", rate.getCurrencyRate());
+                                            editor.apply();
+                                        }
+                                    }
+
+                                    if(rate.getCurrencyType().equals("USD")){
+                                        if(rate.getCurrencyRate() != 0.0){
+                                            editor.putString("previousUSD", rate.getCurrencyType());
+                                            editor.putFloat("previousUSDRate", rate.getCurrencyRate());
+                                            editor.apply();
+                                        }
+                                    }
+                                }
+
+                            } catch (Exception e){
+                                e.printStackTrace();
+
+                            } finally {
+                                Intent mainMenuIntent = new Intent(getApplicationContext(), MainMenu.class);
+                                mainMenuIntent.putExtra("localCurrencyRates", (Serializable) localCurrencyRates);
+                                startActivity(mainMenuIntent);
+                                finish();
                             }
-
-                            localCurrencyRates.addAll(jsonCurrencyTask.fetchCurrencyRates(
-                                    getResources().getStringArray(R.array.currencies),
-                                    localCurrency));
-
-
-                            Intent mainMenuIntent = new Intent(getApplicationContext(), MainMenu.class);
-                            mainMenuIntent.putExtra("localCurrencyRates", (Serializable) localCurrencyRates);
-                            startActivity(mainMenuIntent);
-                            finish();
 
                         }
                     }
@@ -134,11 +176,12 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-
-
-
                     if(getContentResolver().query(MuseumProvider.CONTENT_URI,null,null,null,null).getCount() == 0) {
                         initialiseDatabase();
+
+                        SharedPreferences storedRates = getSharedPreferences("rates",Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = storedRates.edit();
+
 
                         // On start up, set up the default currencies
                         PreferenceManager.getDefaultSharedPreferences(this).edit()
@@ -152,21 +195,58 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
 
 
                         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
                         String localCurrency = mSharedPreferences.getString("localCurrency","DEFAULT");
-
-                        JSONCurrencyTask jsonCurrencyTask = new JSONCurrencyTask();
 
                         List<CurrencyRate> localCurrencyRates = new ArrayList<CurrencyRate>();
 
-                        localCurrencyRates.addAll(jsonCurrencyTask.fetchCurrencyRates(
-                                getResources().getStringArray(R.array.currencies),
-                                localCurrency));
+                        try{
+                            JSONCurrencyTask jsonCurrencyTask = new JSONCurrencyTask();
+                            // Ensure the currency task completes
+                            Thread sleeperThread = new Thread();
+                            try {
+                                sleeperThread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            localCurrencyRates.addAll(jsonCurrencyTask.fetchCurrencyRates(
+                                    getResources().getStringArray(R.array.currencies),
+                                    localCurrency));
 
-                        Intent mainMenuIntent = new Intent(getApplicationContext(), MainMenu.class);
-                        mainMenuIntent.putExtra("localCurrencyRates", (Serializable) localCurrencyRates);
-                        startActivity(mainMenuIntent);
-                        finish();
+                            for(CurrencyRate rate: localCurrencyRates){
+                                    if(rate.getCurrencyType().equals("GBP")){
+                                        if(rate.getCurrencyRate() == 0.0){
+                                            editor.putString("previousGBP", "GBP");
+                                            editor.putFloat("previousGBPRate", 0.88f);
+                                            editor.apply();
+                                        }
+                                    }
+                                    if(rate.getCurrencyType().equals("EUR")){
+                                        if(rate.getCurrencyRate() == 0.0){
+                                            editor.putString("previousEUR", "EUR");
+                                            editor.putFloat("previousEURRate", 1f);
+                                            editor.apply();
+                                        }
+                                    }
+
+                                    if(rate.getCurrencyType().equals("USD")){
+                                        if(rate.getCurrencyRate() == 0.0){
+                                            editor.putString("previousUSD", "USD");
+                                            editor.putFloat("previousUSDRate", 1.17f);
+                                            editor.apply();
+                                        }
+                                    }
+                            }
+
+                        } catch (Exception e){
+                            e.printStackTrace();
+
+                        } finally {
+                            Intent mainMenuIntent = new Intent(getApplicationContext(), MainMenu.class);
+                            mainMenuIntent.putExtra("localCurrencyRates", (Serializable) localCurrencyRates);
+                            startActivity(mainMenuIntent);
+                            finish();
+                        }
+
                     }
 
                 } else {
@@ -307,7 +387,6 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
         String filename = title + ".jpg";
 
 
-
         // Attempt to save file
         final File file = new File(getApplicationContext().getExternalFilesDir
                 (Environment.DIRECTORY_PICTURES), filename);
@@ -323,7 +402,6 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
         }
 
 
-
         ContentValues values = new ContentValues();
         values.put(MuseumDBOpenHelper.DB_KEY_ARTIST, artist);
         values.put(MuseumDBOpenHelper.DB_KEY_TITLE, title);
@@ -336,6 +414,7 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
 
         getContentResolver().insert(MuseumProvider.CONTENT_URI, values);
     }
+
 
 
 }

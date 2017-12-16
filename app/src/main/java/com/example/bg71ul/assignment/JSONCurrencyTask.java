@@ -20,10 +20,10 @@ public class JSONCurrencyTask extends AsyncTask<String, Void, CurrencyRate> {
         Log.d("PARAM 1 and 2 " , strings[0] + " " + strings[1] );
         CurrencyRate currencyRate = new CurrencyRate();
         String data = ((new CurrencyHttpClient()).getCurrencyData(strings[1]));
-        Log.d("JSON currency",data);
-        if(data != null){
-            try {
 
+        if(data != null){
+            Log.d("JSON currency",data);
+            try {
                 currencyRate = JSONCurrencyParser.getCurrencyRate(data, strings[0], strings[1]);
             } catch (Exception e){
                 e.printStackTrace();
@@ -38,12 +38,10 @@ public class JSONCurrencyTask extends AsyncTask<String, Void, CurrencyRate> {
 
     @Override
     protected void onPostExecute(CurrencyRate currencyRate) {
-        //do stuff
-        myMethod(currencyRate);
+        rate(currencyRate);
     }
 
-    private CurrencyRate myMethod(CurrencyRate myValue) {
-        //handle value
+    private CurrencyRate rate(CurrencyRate myValue) {
         return myValue;
     }
 

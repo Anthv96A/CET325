@@ -6,7 +6,6 @@
     <string name="copyright">Copyright © 2017 </string>
 
     <!--Splash Screen-->
-    <!--Splash Screen-->
     <string name="please_wait">Please wait while the application loads...</string>
 
 
@@ -68,6 +67,14 @@
 
     <!--Google Maps Get places API KEY-->
     <string name="google_places_api_key">AIzaSyBU58QUYxRfxD3zYgIy5asnxV-96mYVjYk</string>
+
+    <!--Louvre Musuem Maps-->
+    <string-array name="places_selection">
+        <item>Restaurants</item>
+        <item>Hotels</item>
+        <item>Cafe</item>
+        <item>Shops</item>
+    </string-array>
 
 
 </resources>

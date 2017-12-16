@@ -4,28 +4,42 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/search_nearby_places"
-        android:layout_width="290dp"
-        android:layout_height="45dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Search for places nearby"
-        android:layout_alignParentTop="true"
+    <Spinner
+        android:id="@+id/google_maps_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:alpha="1"
+        android:textColor="@color/blackText"
+        android:layout_gravity="center"
+        android:ellipsize="marquee"
+        android:gravity="center"
+        android:layout_alignParentTop="true">
+
+    </Spinner>
+
+    <!--<EditText-->
+        <!--android:id="@+id/search_nearby_places"-->
+        <!--android:layout_width="290dp"-->
+        <!--android:layout_height="45dp"-->
+        <!--android:ems="10"-->
+        <!--android:inputType="textPersonName"-->
+        <!--android:hint="Search for places nearby"-->
+        <!--android:layout_alignParentTop="true"-->
 />
 
-    <Button
-        android:id="@+id/B_search"
-        android:layout_width="100dp"
-        android:layout_height="45dp"
-        android:gravity="center_horizontal"
-        android:onClick="onClick"
-        android:text="Search"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="12dp"
-        android:layout_marginEnd="12dp" />
+    <!--<Button-->
+        <!--android:id="@+id/B_search"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="45dp"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:onClick="onClick"-->
+        <!--android:text="Search"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_marginRight="12dp"-->
+        <!--android:layout_marginEnd="12dp" />-->
 
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
@@ -38,7 +52,7 @@
         tools:context="com.example.priyanka.mapsdemo.MapsActivity"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:layout_below="@id/search_nearby_places"
+        android:layout_below="@id/google_maps_spinner"
   />
 
 

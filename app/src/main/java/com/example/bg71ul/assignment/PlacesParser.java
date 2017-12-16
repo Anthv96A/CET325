@@ -42,7 +42,7 @@ public class PlacesParser {
 
             reference = googlePlaceJSON.getString("reference");
 
-            // Extracting the values from the user input string into hash map
+            // Extracting the values google based on user input string into hash map
             googlePlacesMap.put("placeName", placeName);
             googlePlacesMap.put("vicinity", vicinity);
             googlePlacesMap.put("lat", latitude);
@@ -57,37 +57,27 @@ public class PlacesParser {
         return googlePlacesMap;
     }
 
-    private List<HashMap<String,String>> getPlaces(JSONArray jsonArray){
-
-        int count = jsonArray.length();
-        List<HashMap<String,String>> places = new ArrayList<>();
-        HashMap<String,String> place = null;
-
-        for(int i =0; i < count; i++){
-            try {
-                place = this.getPlace((JSONObject) jsonArray.get(i));
-                places.add(place);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        return places;
-    }
 
     public List<HashMap<String,String>> parse(String jsonData){
 
+        List<HashMap<String,String>> places = new ArrayList<>();
         JSONArray jsonArray = null;
         JSONObject jsonObject;
-
         try{
             jsonObject = new JSONObject(jsonData);
             jsonArray = jsonObject.getJSONArray("results");
         } catch (Exception e){
             e.printStackTrace();
         }
-        return getPlaces(jsonArray);
+
+        for(int i = 0; i < jsonArray.length(); i++){
+            try{
+                places.add(this.getPlace((JSONObject) jsonArray.get(i)));
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return places;
 
     }
 }

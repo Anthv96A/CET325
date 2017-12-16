@@ -22,17 +22,16 @@ public class JSONGetNearbyPlacesTask extends AsyncTask<Object,String,String> {
     private String googlePlacesData;
     private GoogleMap googleMap;
     private String url;
+    private String[] values;
 
     @Override
     protected String doInBackground(Object... objects) {
         this.googleMap = (GoogleMap) objects[0];
-        this.url = (String) objects[1];
-
-        Log.d("Passed url", this.url);
+        this.values = (String[]) objects[1];
 
         NearbyPlacesHttpClient nearbyPlacesHttpClient = new NearbyPlacesHttpClient();
         try {
-            googlePlacesData = nearbyPlacesHttpClient.getPlaces(this.url);
+            googlePlacesData = nearbyPlacesHttpClient.getPlaces(values);
         } catch (Exception e){
             e.printStackTrace();
         }

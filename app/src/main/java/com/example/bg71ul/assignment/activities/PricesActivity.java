@@ -1,5 +1,6 @@
 package com.example.bg71ul.assignment.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -34,14 +35,12 @@ import java.util.List;
 
 public class PricesActivity extends AppCompatActivity {
 
-
-
     public static String localCurrency;
     public static String yourCurrency;
     public static List<CurrencyRate> currencyRates = new ArrayList<>();
     public static double ticketPrice = 0;
-    public static double rate = 0.8;
-
+    private boolean usingDefaultRates = false;
+    private SharedPreferences backUpRates = null;
     private SharedPreferences currencyPreferences = null;
 
     /**
@@ -64,23 +63,45 @@ public class PricesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prices);
 
+        backUpRates = getSharedPreferences("rates", Context.MODE_PRIVATE);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        
 
         Intent intent = getIntent();
 
         currencyRates = (List<CurrencyRate>) intent.getSerializableExtra("localCurrencyRates");
-        Log.d("Prices Activity", currencyRates.toString());
 
+        for(CurrencyRate cr: currencyRates){
+            if(cr.getCurrencyRate() == 0.0){
+                if(cr.getCurrencyType().equals("GBP")){
+                    cr.setCurrencyRate(backUpRates.getFloat("previousGBPRate",0.0f));
+                    usingDefaultRates = true;
+                }
+                if(cr.getCurrencyType().equals("EUR")){
+                    cr.setCurrencyRate(backUpRates.getFloat("previousGBPRate",0.0f));
+                    usingDefaultRates = true;
+                }
+                if(cr.getCurrencyType().equals("USD")){
+                    cr.setCurrencyRate(backUpRates.getFloat("previousGBPRate",0.0f));
+                    usingDefaultRates = true;
+                }
+            }
+        }
+        // If we have failed to fetch latest rates, so we will
+        // notify user that we will use previous rates
+        if(usingDefaultRates){
+            Snackbar.make(findViewById(android.R.id.content),
+                    "Unable to fetch latest currency rates, defaulting to previous rates",
+                    Snackbar.LENGTH_LONG).show();
+        }
+
+        Log.d("Prices Activity", currencyRates.toString());
 
         currencyPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         yourCurrency = this.currencyPreferences.getString("yourCurrency","DEFAULT");
         localCurrency = this.currencyPreferences.getString("localCurrency","DEFAULT");
-
         String ticketPriceString = this.currencyPreferences.getString("ticketPrice", "DEFAULT");
-
         ticketPrice = Double.parseDouble(ticketPriceString);
 
         // Create the adapter that will return a fragment for each of the three
@@ -93,8 +114,6 @@ public class PricesActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-
     }
 
 

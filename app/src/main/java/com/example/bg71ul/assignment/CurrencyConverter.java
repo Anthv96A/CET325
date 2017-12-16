@@ -22,7 +22,6 @@ public class CurrencyConverter {
         for(CurrencyRate cr: rates){
             if(yourCurrency.equals(cr.getCurrencyType())){
                 exchangeRate = cr.getCurrencyRate();
-                Log.d("Exchange rate " , String.valueOf(exchangeRate));
             }
         }
 
@@ -52,7 +51,6 @@ public class CurrencyConverter {
         for(CurrencyRate cr: rates){
             if(yourCurrency.equals(cr.getCurrencyType())){
                 exchangeRate = cr.getCurrencyRate();
-                Log.d("Exchange rate " , String.valueOf(exchangeRate));
             }
         }
 
