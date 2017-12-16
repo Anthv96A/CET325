@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.bg71ul.assignment">
+    package="com.cet325.bg71ul.assignment">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <permission
-        android:name="com.example.bg71ul.assignment.READ_DATABASE"
+        android:name="com.cet325.bg71ul.assignment.READ_DATABASE"
         android:protectionLevel="normal" />
     <permission
-        android:name="com.example.bg71ul.assignment.WRITE_DATABASE"
+        android:name="com.cet325.bg71ul.assignment.WRITE_DATABASE"
         android:protectionLevel="normal" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -29,7 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.SplashScreen"
+            android:name="com.cet325.bg71ul.assignment.activities.SplashScreen"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,23 +37,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainMenu" />
-        <activity android:name=".activities.CurrencyActivity" />
+        <activity android:name="com.cet325.bg71ul.assignment.activities.MainMenu" />
+        <activity android:name="com.cet325.bg71ul.assignment.activities.CurrencyActivity" />
         <activity
-            android:name=".activities.GalleryActivity"
+            android:name="com.cet325.bg71ul.assignment.activities.GalleryActivity"
             android:label="@string/title_activity_gallery"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <provider
-            android:name=".MuseumProvider"
-            android:authorities="com.example.bg71ul.assignment"
+            android:name="com.cet325.bg71ul.assignment.MuseumProvider"
+            android:authorities="com.cet325.bg71ul.assignment"
             android:exported="true"
             android:readPermission="com.example.bg71ul.assignment.READ_DATABASE"
             android:writePermission="com.example.bg71ul.assignment.WRITE_DATABASE" />
 
-        <activity android:name=".activities.DetailActivity" />
+        <activity android:name="com.cet325.bg71ul.assignment.activities.DetailActivity" />
         <activity
-            android:name=".activities.PricesActivity"
+            android:name="com.cet325.bg71ul.assignment.activities.PricesActivity"
             android:label="@string/title_activity_prices"
             android:theme="@style/AppTheme.NoActionBar" />
         <!--
@@ -69,7 +69,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".activities.LouvreMapsActivity"
+            android:name="com.cet325.bg71ul.assignment.activities.LouvreMapsActivity"
             android:label="@string/title_activity_louvre_maps"></activity>
     </application>
 

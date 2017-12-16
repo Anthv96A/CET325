@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.bg71ul.assignment.activities.PricesActivity">
+    tools:context="com.cet325.bg71ul.assignment.activities.PricesActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "26.0.1"
     defaultConfig {
-        applicationId "com.example.bg71ul.assignment"
+        applicationId "com.cet325.bg71ul.assignment"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1

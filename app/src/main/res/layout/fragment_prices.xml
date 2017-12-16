@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.bg71ul.assignment.activities.PricesActivity$PlaceholderFragment">
+    tools:context="com.cet325.bg71ul.assignment.activities.PricesActivity$PlaceholderFragment">
 
         <TableRow
             android:alpha="1"

@@ -49,7 +49,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="com.example.priyanka.mapsdemo.MapsActivity"
+        tools:context="com.cet325.priyanka.mapsdemo.MapsActivity"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_below="@id/google_maps_spinner"

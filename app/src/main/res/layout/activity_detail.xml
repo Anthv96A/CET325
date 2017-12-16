@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.example.bg71ul.assignment.activities.DetailActivity"
+    tools:context="com.cet325.bg71ul.assignment.activities.DetailActivity"
     android:orientation="vertical"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
