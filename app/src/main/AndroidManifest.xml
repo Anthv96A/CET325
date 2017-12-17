@@ -21,16 +21,13 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality. 
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- android:icon="@mipmap/ic_launcher" -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/lourve_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name="com.cet325.bg71ul.assignment.activities.SplashScreen"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name="com.cet325.bg71ul.assignment.activities.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,7 +35,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.cet325.bg71ul.assignment.activities.MainMenu" />
-        <activity android:name="com.cet325.bg71ul.assignment.activities.CurrencyActivity" />
+        <activity android:name="com.cet325.bg71ul.assignment.activities.CurrencyActivity"
+            android:label="@string/currency_title"/>
         <activity
             android:name="com.cet325.bg71ul.assignment.activities.GalleryActivity"
             android:label="@string/title_activity_gallery"
@@ -48,8 +46,8 @@
             android:name="com.cet325.bg71ul.assignment.MuseumProvider"
             android:authorities="com.cet325.bg71ul.assignment"
             android:exported="true"
-            android:readPermission="com.example.bg71ul.assignment.READ_DATABASE"
-            android:writePermission="com.example.bg71ul.assignment.WRITE_DATABASE" />
+            android:readPermission="com.cet325.bg71ul.assignment.READ_DATABASE"
+            android:writePermission="com.cet325.bg71ul.assignment.WRITE_DATABASE" />
 
         <activity android:name="com.cet325.bg71ul.assignment.activities.DetailActivity" />
         <activity

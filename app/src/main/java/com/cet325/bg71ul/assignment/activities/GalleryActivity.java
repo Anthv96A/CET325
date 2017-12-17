@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
@@ -47,6 +48,7 @@ public class GalleryActivity extends AppCompatActivity
     private ListView list;
     public static int checker = 0;
     private int selected;
+    final ViewGroup nullParent = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,7 @@ public class GalleryActivity extends AppCompatActivity
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long id){
 
                 LayoutInflater li = LayoutInflater.from(GalleryActivity.this);
-                View getDeleteDialog = li.inflate(R.layout.delete_gallery,null);
+                View getDeleteDialog = li.inflate(R.layout.delete_gallery,nullParent);
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(GalleryActivity.this);
                 alertDialogBuilder.setView(getDeleteDialog);
@@ -339,7 +341,7 @@ public class GalleryActivity extends AppCompatActivity
     private void createDialog(final View view){
 
         LayoutInflater li = LayoutInflater.from(GalleryActivity.this);
-        View getGalleryIdView = li.inflate(R.layout.dialog_add_new_gallery,null);
+        View getGalleryIdView = li.inflate(R.layout.dialog_add_new_gallery,nullParent);
 
         final AlertDialog.Builder createNewGallery = new AlertDialog.Builder(GalleryActivity.this);
         createNewGallery.setView(getGalleryIdView);

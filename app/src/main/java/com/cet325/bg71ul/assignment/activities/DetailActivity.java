@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView roomTextView = null;
     RatingBar rankRatingBar = null;
     ImageView galleryImage = null;
+    final ViewGroup nullParent = null;
 
     public float getRank(){
         return this.rank;
@@ -195,7 +197,7 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         LayoutInflater layoutInflater = LayoutInflater.from(DetailActivity.this);
-        View getEditDialog = layoutInflater.inflate(R.layout.edit_anyfield,null);
+        View getEditDialog = layoutInflater.inflate(R.layout.edit_anyfield,nullParent);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DetailActivity.this);
 
         Gallery editGallery = new Gallery();
@@ -289,7 +291,7 @@ public class DetailActivity extends AppCompatActivity {
     private void editOnlyRankDialog(){
 
         LayoutInflater layoutInflater = LayoutInflater.from(DetailActivity.this);
-        View getEditDialog = layoutInflater.inflate(R.layout.edit_preloaded_rank, null);
+        View getEditDialog = layoutInflater.inflate(R.layout.edit_preloaded_rank, nullParent);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DetailActivity.this);
 
         edited = (RatingBar) getEditDialog.findViewById(R.id.editRatingPreLoaded);

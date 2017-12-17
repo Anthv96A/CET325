@@ -18,38 +18,15 @@
 
     </Spinner>
 
-    <!--<EditText-->
-        <!--android:id="@+id/search_nearby_places"-->
-        <!--android:layout_width="290dp"-->
-        <!--android:layout_height="45dp"-->
-        <!--android:ems="10"-->
-        <!--android:inputType="textPersonName"-->
-        <!--android:hint="Search for places nearby"-->
-        <!--android:layout_alignParentTop="true"-->
-/>
-
-    <!--<Button-->
-        <!--android:id="@+id/B_search"-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="45dp"-->
-        <!--android:gravity="center_horizontal"-->
-        <!--android:onClick="onClick"-->
-        <!--android:text="Search"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignParentEnd="true"-->
-        <!--android:layout_marginRight="12dp"-->
-        <!--android:layout_marginEnd="12dp" />-->
-
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="com.cet325.priyanka.mapsdemo.MapsActivity"
+        tools:context="com.cet325.bg71ul.assignment.activities.MapsActivity"
+        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_below="@id/google_maps_spinner"

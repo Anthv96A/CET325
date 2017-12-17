@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -28,13 +30,16 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
     private int selectedPosition;
     private String yourCurrency;
     private int initialLoading = 0;
-
+    private boolean error = false;
+    private boolean emptyError = false;
+    final ViewGroup nullParent = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_currency);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+        setContentView(R.layout.activity_currency);
 
         this.currencyPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         this.yourCurrency = currencyPreferences.getString("yourCurrency", "DEFAULT");
@@ -96,31 +101,38 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.setCurrency: {
+            case R.id.setTicketPrice: {
                 editTicketPrice();
                 return true;
+            }
+            case R.id.setStudentDiscount:{
+                editStudentDiscount();
+                return true;
+
             }
 
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void editStudentDiscount() {
 
+        if(error){
+            Toast.makeText(this, "Your value is out of bounds", Toast.LENGTH_SHORT).show();
+        }
 
-    private void editTicketPrice(){
+        if(emptyError){
+            Toast.makeText(this, "You can't submit an empty value", Toast.LENGTH_SHORT).show();
+        }
+
         LayoutInflater layoutInflater = LayoutInflater.from(CurrencyActivity.this);
-        View getEditDialog = layoutInflater.inflate(R.layout.edit_ticket_price, null);
+        View getEditDialog = layoutInflater.inflate(R.layout.edit_student_discount, nullParent);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CurrencyActivity.this);
 
-        String currentTicketPrice = this.currencyPreferences.getString("ticketPrice","DEFAULT");
+        String currentStudentDiscount = this.currencyPreferences.getString("studentDiscount","DEFAULT");
 
-
-        final TextView txtNewPrice = (TextView) getEditDialog.findViewById(R.id.editTextDialogTicketInput);
-
-
-        txtNewPrice.setText(currentTicketPrice);
-
-
+        final TextView txtNewStudentDiscount = (TextView) getEditDialog.findViewById(R.id.editTextDialogStudentInput);
+        txtNewStudentDiscount.setText(currentStudentDiscount);
         alertDialogBuilder.setView(getEditDialog);
 
         alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -131,12 +143,68 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
         }).setPositiveButton("Edit", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
-                String newPrice = txtNewPrice.getText().toString();
+                String newPrice = txtNewStudentDiscount.getText().toString();
+                if(newPrice == null || newPrice.isEmpty()){
+                    emptyError = true;
+                    error = false;
+                    editStudentDiscount();
+                    return;
+                }
+
+                double check = Double.parseDouble(txtNewStudentDiscount.getText().toString());
+                if(check > 100 || check <= 0 ){
+                    error = true;
+                    emptyError = false;
+                    editStudentDiscount();
+                    return;
+                }
+
 
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
+                        .putString("studentDiscount", newPrice).apply();
+                error = false;
+                emptyError = false;
+                Toast.makeText(CurrencyActivity.this, "Updated", Toast.LENGTH_SHORT).show();
+            }
+        }).create().show();
+    }
+
+
+    private void editTicketPrice(){
+
+        if(emptyError){
+            Toast.makeText(this, "You can't submit an empty value", Toast.LENGTH_SHORT).show();
+        }
+
+        LayoutInflater layoutInflater = LayoutInflater.from(CurrencyActivity.this);
+        View getEditDialog = layoutInflater.inflate(R.layout.edit_ticket_price, nullParent);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CurrencyActivity.this);
+
+        String currentTicketPrice = this.currencyPreferences.getString("ticketPrice","DEFAULT");
+
+        final TextView txtNewPrice = (TextView) getEditDialog.findViewById(R.id.editTextDialogTicketInput);
+        txtNewPrice.setText(currentTicketPrice);
+        alertDialogBuilder.setView(getEditDialog);
+
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Toast.makeText(CurrencyActivity.this, "Dismissed", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        }).setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+
+                String newPrice = txtNewPrice.getText().toString();
+
+                if(newPrice == null || newPrice.isEmpty()){
+                    emptyError = true;
+                    editTicketPrice();
+                    return;
+                }
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
                         .putString("ticketPrice", newPrice).apply();
-
-
+                emptyError = false;
                 Toast.makeText(CurrencyActivity.this, "Updated", Toast.LENGTH_SHORT).show();
             }
         }).create().show();

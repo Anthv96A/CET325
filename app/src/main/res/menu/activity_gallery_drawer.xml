@@ -1,41 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <group android:checkableBehavior="single">
         <item
-            android:title="Go Back"
+            android:title="@string/go_back"
             android:id="@+id/goBack"/>
-        <item android:title="Select Mode">
+        <item android:title="@string/select_mode">
             <menu>
                 <item
                     android:id="@+id/allGallery"
-                    android:title="All" />
-
+                    android:title="@string/title_all" />
                 <item
                     android:id="@+id/allRanked"
-                    android:title="Ranked" />
-
+                    android:title="@string/title_ranked" />
                 <item
                     android:id="@+id/allNotRanked"
-                    android:title="Not Ranked" />
-
+                    android:title="@string/title_not_ranked" />
             </menu>
         </item>
     </group>
-
-    <item android:title="Order By">
+    <item android:title="@string/order_by">
         <menu>
             <item
                 android:id="@+id/sortArtistAndTitle"
-                android:title="Artist and Title" />
+                android:title="@string/order_by_title_and_artist" />
             <item
                 android:id="@+id/sortTitle"
-                android:title="Title" />
+                android:title="@string/order_by_title" />
             <item
                 android:id="@+id/sortRank"
-                android:title="Rank" />
-
+                android:title="@string/order_by_rank" />
         </menu>
     </item>
-
 </menu>

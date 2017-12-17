@@ -104,6 +104,12 @@ public class LouvreMapsActivity extends FragmentActivity implements OnMapReadyCa
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+//        Location location = new Location("");
+//        location.setLatitude(48.86);
+//        location.setLongitude(2.33);
+
+        //double lat = location.getLatitude()
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             bulidGoogleApiClient();
             mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);

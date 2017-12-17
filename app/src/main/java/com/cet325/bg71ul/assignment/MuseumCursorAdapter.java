@@ -2,6 +2,7 @@ package com.cet325.bg71ul.assignment;
 
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -79,10 +80,17 @@ public class MuseumCursorAdapter extends CursorAdapter{
             }
         }
 
-        titleTextView.setText("Painting: "+ title);
-        artistTextView.setText("Artist: " + artist);
-        roomTextView.setText("Room: " + room);
-        yearView.setText("The year of completion: " + year);
+
+        String fullTitle = "Painting: " + title;
+        String fullArtist = "Artist: " + artist;
+        String fullRoom = "Room: " + room;
+        String fullYear = "The year of completion: " + year;
+
+
+        titleTextView.setText(fullTitle);
+        artistTextView.setText(fullArtist);
+        roomTextView.setText(fullRoom);
+        yearView.setText(fullYear);
         ratingBar.setRating(rank);
 
     }

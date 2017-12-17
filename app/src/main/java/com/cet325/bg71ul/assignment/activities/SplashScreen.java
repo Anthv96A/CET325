@@ -1,5 +1,6 @@
 package com.cet325.bg71ul.assignment.activities;
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -36,6 +37,7 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
 
     private static final int DURATION = 2000;
     private static final int WRITE_TO_EXTERNAL_STORAGE = 0;
+    public static final int REQUEST_LOCATION_CODE = 99;
 
 
     @Override
@@ -142,7 +144,15 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
 
     public void checkPermissions(){
 
-        String[] permissions = new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        String[] permissions = new String[]{
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        };
+
+        int[] codes = new int[]{
+                REQUEST_LOCATION_CODE,
+                WRITE_TO_EXTERNAL_STORAGE
+        };
 
         int result;
         List<String> permissionsNeeded = new ArrayList<>();
@@ -162,11 +172,13 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
     }
 
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case WRITE_TO_EXTERNAL_STORAGE: {
                 // If request is cancelled, the result arrays are empty.
+                boolean storagePermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     if(getContentResolver().query(MuseumProvider.CONTENT_URI,null,null,null,null).getCount() == 0) {
@@ -183,8 +195,12 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                         PreferenceManager.getDefaultSharedPreferences(this).edit()
                                 .putString("yourCurrency", "EUR").apply();
 
+                        // Create default ticket price (In Euros)
                         PreferenceManager.getDefaultSharedPreferences(this).edit()
                                 .putString("ticketPrice", "20").apply();
+
+                        PreferenceManager.getDefaultSharedPreferences(this).edit()
+                                .putString("studentDiscount", "30").apply();
 
 
                         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -205,6 +221,8 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                                     getResources().getStringArray(R.array.currencies),
                                     localCurrency));
 
+                            // If the app runs for the first time, we need to set default values if
+                            // the API call fails.
                             for(CurrencyRate rate: localCurrencyRates){
                                     if(rate.getCurrencyType().equals("GBP")){
                                         if(rate.getCurrencyRate() == 0.0){
@@ -372,6 +390,7 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
 
     private void createGallery(String artist,String title,String description, String room, double rank, int year, int pictureId) {
 
+        // We will set zero in the database for later to say that the pre-loaded records can't be edited fully
         final int notEditable = 0;
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), pictureId);

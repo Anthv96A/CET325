@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:padding="4dp"
-    android:divider="@color/blackText">
-
-
-    <RelativeLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
         <ImageView
+            android:layout_marginTop="4sp"
             android:id="@+id/imageDocIcon"
             android:layout_width="140dp"
+            android:contentDescription="@string/content_description"
             android:layout_height="120dp" />
 
         <TextView
@@ -23,10 +16,11 @@
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_marginTop="5dp"
+            android:layout_marginStart="12dp"
             android:layout_marginLeft="12dp"
             android:layout_toEndOf="@+id/imageDocIcon"
             android:layout_toRightOf="@+id/imageDocIcon"
-            android:text="Title"
+            android:text="@string/painting"
             android:textColor="@android:color/black"
             android:textSize="14sp"
             android:textStyle="bold"/>
@@ -37,11 +31,12 @@
             android:layout_height="20dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_marginStart="12dp"
             android:layout_marginLeft="12dp"
             android:layout_toEndOf="@+id/imageDocIcon"
             android:layout_toRightOf="@+id/imageDocIcon"
             android:layout_below="@+id/titleTextView"
-            android:text="Artist"
+            android:text="@string/artist"
             android:textColor="@android:color/black"
             android:textSize="12sp" />
 
@@ -51,8 +46,9 @@
             android:layout_height="20dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_marginStart="12dp"
             android:layout_marginLeft="12sp"
-            android:text="Room"
+            android:text="@string/room"
             android:textSize="12sp"
             android:textColor="@color/blackText"
             android:layout_toEndOf="@+id/imageDocIcon"
@@ -65,6 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/imageDocIcon"
+            android:layout_marginStart="12dp"
             android:layout_marginLeft="5dp"
             android:isIndicator="true"
             android:numStars="5"
@@ -78,16 +75,15 @@
             android:layout_height="36dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_marginStart="12dp"
             android:layout_marginLeft="12sp"
-            android:text="Year"
+            android:text="@string/year"
             android:textSize="12sp"
             android:textColor="@color/blackText"
             android:layout_toEndOf="@+id/imageDocIcon"
             android:layout_toRightOf="@+id/imageDocIcon"
             android:layout_below="@+id/roomTextView"/>
-
-
     </RelativeLayout>
 
-</LinearLayout>
+
 

@@ -1,6 +1,5 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#d3d3d3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -15,17 +14,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="43dp"
-            android:layout_below="@+id/section_label"
             >
 
             <TextView
                 android:id="@+id/priceLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:text="Price: "
+                android:layout_gravity="start"
+                android:text="@string/text_price"
                 android:textColor="@color/blackText"
-                android:textSize="30dp"
+                android:textSize="30sp"
                 android:textStyle="bold">
 
             </TextView>
@@ -35,8 +33,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
-                android:text="$20 "
                 android:textSize="30sp">
 
             </TextView>
@@ -54,11 +52,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:text="Local Currency: "
+                android:text="@string/local_currency"
                 android:textStyle="bold"
                 android:textColor="@color/blackText"
-                android:textSize="30dp"
-                android:layout_gravity="left">
+                android:textSize="30sp"
+                android:layout_gravity="start">
 
             </TextView>
 
@@ -67,10 +65,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:text=" Euros "
-                android:textSize="30dp"
+                android:textSize="30sp"
                 >
 
             </TextView>
@@ -86,12 +84,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:layout_gravity="left"
-                android:text="Your Currency: "
+                android:layout_gravity="start"
+                android:text="@string/your_currency"
                 android:textStyle="bold"
                 android:textColor="@color/blackText"
-                android:textSize="30dp">
-
+                android:textSize="30sp">
             </TextView>
 
             <TextView
@@ -99,11 +96,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:text="Dollars"
-                android:textSize="30dp">
-
+                android:textSize="30sp">
             </TextView>
         </TableRow>
 

@@ -8,7 +8,7 @@
 
 
     <EditText
-        android:id="@+id/editTextDialogTicketInput"
+        android:id="@+id/editTextDialogStudentInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -17,20 +17,21 @@
         android:layout_marginEnd="12dp"
         android:layout_marginRight="12dp"
         android:layout_marginTop="84dp"
-        android:hint="@string/ticket_price"
+        android:hint="@string/student_discount"
         android:inputType="number" />
 
     <TextView
-        android:id="@+id/textPrice"
+        android:id="@+id/textStudentDiscount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:height="30dp"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:text="@string/ticket_price_edit"
+        android:text="@string/student_discount_edit"
         android:layout_marginTop="24dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>

@@ -35,6 +35,7 @@ public class PricesActivity extends AppCompatActivity {
     public static String yourCurrency;
     public static List<CurrencyRate> currencyRates = new ArrayList<>();
     public static double ticketPrice = 0;
+    public static double studentDiscount = 0;
     private boolean usingDefaultRates = false;
     private SharedPreferences backUpRates = null;
     private SharedPreferences currencyPreferences = null;
@@ -97,8 +98,15 @@ public class PricesActivity extends AppCompatActivity {
         currencyPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         yourCurrency = this.currencyPreferences.getString("yourCurrency","DEFAULT");
         localCurrency = this.currencyPreferences.getString("localCurrency","DEFAULT");
+
+        // Extract ticket price from shared preference
         String ticketPriceString = this.currencyPreferences.getString("ticketPrice", "DEFAULT");
         ticketPrice = Double.parseDouble(ticketPriceString);
+
+        // Extract student discount from shared preference
+        String studentDiscountString = this.currencyPreferences.getString("studentDiscount","DEFAULT");
+        studentDiscount = Double.parseDouble(studentDiscountString);
+
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -169,7 +177,7 @@ public class PricesActivity extends AppCompatActivity {
 
             if(getArguments().getInt(ARG_SECTION_NUMBER) == 1){
                 // Student Tab
-                double totalprice = currencyConverter.calculateStudentPrices(localCurrency, yourCurrency, currencyRates, ticketPrice);
+                double totalprice = currencyConverter.calculateStudentPrices(localCurrency, yourCurrency, currencyRates, ticketPrice,studentDiscount);
                 TextView pricesTextView = (TextView) rootView.findViewById(R.id.priceCost);
                 pricesTextView.setText(String.valueOf(df.format(totalprice)));
             }

@@ -19,6 +19,7 @@ public class CurrencyConverterTest {
     List<CurrencyRate> currencyRates = null;
 
     private final double ticketPrice = 20;
+    private final double studentDiscount = 30;
 
     // Create a new instance of currency converter for each test
     @Before
@@ -80,7 +81,7 @@ public class CurrencyConverterTest {
         currencyRates.add(currencyRateEUR);
 
         double expectedCost = 14;
-        double actualCost = currencyConverter.calculateStudentPrices("EUR","EUR", currencyRates,ticketPrice);
+        double actualCost = currencyConverter.calculateStudentPrices("EUR","EUR", currencyRates,ticketPrice,studentDiscount);
 
         assertEquals("Local currency is Euro, with additional 30% off for student for selected currency of Euros",expectedCost,actualCost,0.1);
     }
@@ -95,7 +96,7 @@ public class CurrencyConverterTest {
         currencyRates.add(currencyRateGBP);
 
         double expectedCost = 12.4;
-        double actualCost = currencyConverter.calculateStudentPrices("EUR","GBP", currencyRates,ticketPrice);
+        double actualCost = currencyConverter.calculateStudentPrices("EUR","GBP", currencyRates,ticketPrice,studentDiscount);
         assertEquals("Local currency is Euro, with additional 30% off for student for selected currency of British Pounds",expectedCost,actualCost,0.1);
     }
 
@@ -109,7 +110,7 @@ public class CurrencyConverterTest {
         currencyRates.add(currencyRateUSD);
 
         double expectedCost = 16.6;
-        double actualCost = currencyConverter.calculateStudentPrices("EUR","USD", currencyRates,ticketPrice);
+        double actualCost = currencyConverter.calculateStudentPrices("EUR","USD", currencyRates,ticketPrice,studentDiscount);
         assertEquals("Local currency is Euro, with additional 30% off for student for selected currency of US Dollars",expectedCost,actualCost,0.1);
 
     }

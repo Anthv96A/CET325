@@ -39,10 +39,10 @@ public class CurrencyConverter {
 
     }
 
-    public double calculateStudentPrices(String localCurrency, String yourCurrency, List<CurrencyRate> rates, double ticketPrice){
+    public double calculateStudentPrices(String localCurrency, String yourCurrency, List<CurrencyRate> rates, double ticketPrice, double studentDiscount){
 
         final double admissionPrice = ticketPrice;
-        final double studentDiscount = 0.30;
+        final double admissionStudentDiscount = (studentDiscount / 100);
 
         float exchangeRate = 0;
 
@@ -53,18 +53,18 @@ public class CurrencyConverter {
         }
 
         if(yourCurrency.equals(localCurrency)){
-            return (admissionPrice) - (admissionPrice * studentDiscount);
+            return (admissionPrice) - (admissionPrice * admissionStudentDiscount);
         }
 
         if(yourCurrency.equals("GBP")){
-            return (exchangeRate * admissionPrice ) - (exchangeRate * admissionPrice * studentDiscount);
+            return (exchangeRate * admissionPrice ) - (exchangeRate * admissionPrice * admissionStudentDiscount);
         }
 
         if(yourCurrency.equals("USD")){
-            return (exchangeRate * admissionPrice ) - (exchangeRate * admissionPrice * studentDiscount);
+            return (exchangeRate * admissionPrice ) - (exchangeRate * admissionPrice * admissionStudentDiscount);
         }
 
-        return admissionPrice * studentDiscount;
+        return admissionPrice * admissionStudentDiscount;
 
     }
 }
