@@ -2,7 +2,7 @@
 
 
     <!--Main Application Name-->
-    <string name="app_name">Lourve Museum </string>
+    <string name="app_name">Louvre Museum </string>
     <string name="copyright">Copyright © 2017 </string>
 
     <!--Splash Screen-->
@@ -12,12 +12,12 @@
 
     <!--Main Menu Strings, for buttons, menus, text views etc.-->
     <string name="btn_view_gallery">View Gallery</string>
-    <string name="btn_view_google_maps">Find places near you!</string>
+    <string name="btn_view_google_maps">Find places near us!</string>
     <string name="btn_set_your_currency">Set your currency</string>
     <string name="menu_information_prices">Information Prices</string>
     <string name="main_menu">Main Menu</string>
     <string name="intro_text">
-        Welcome to the world famous Lourve Museum! The application will give you
+        Welcome to the world famous Louvre Museum! The application will give you
         as much information as possible to navigate around the museum.
         Please select any of the given options to use the application.
     </string>
