@@ -29,6 +29,7 @@ public class MuseumCursorAdapter extends CursorAdapter{
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        // Use layout museum_list_item.xml to bind data
         return LayoutInflater.from(context).inflate(
                 R.layout.museum_list_item, parent, false
         );
@@ -37,21 +38,24 @@ public class MuseumCursorAdapter extends CursorAdapter{
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
+        // Fetch title, artist, room, ranking, year from database
         String title = cursor.getString(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_TITLE));
         String artist = cursor.getString(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_ARTIST));
         String room = cursor.getString(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_ROOM));
         String ranking = cursor.getString(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_RANK));
         String year = cursor.getString(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_YEAR));
 
-
         float rank;
 
+        // If the rank has come back as null, it has not been ranked yet
         if(ranking == null){
             rank = 0;
         } else{
+            // else parse the rank from string
             rank = Float.parseFloat(ranking);
         }
 
+        // As the room field is not mandatory, we need to check it is not null before we bind
         if(room == null || room.isEmpty()){
             room = "No room set";
         }
@@ -87,11 +91,11 @@ public class MuseumCursorAdapter extends CursorAdapter{
         String fullYear = "The year of completion: " + year;
 
 
+        // Bind all: title, artist, room, year and rank all to list item
         titleTextView.setText(fullTitle);
         artistTextView.setText(fullArtist);
         roomTextView.setText(fullRoom);
         yearView.setText(fullYear);
         ratingBar.setRating(rank);
-
     }
 }

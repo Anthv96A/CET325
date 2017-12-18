@@ -14,6 +14,7 @@ import java.net.URLEncoder;
  */
 
 public class CurrencyHttpClient {
+    //Fixer IO URL
     private final String BASE_URL = "http://api.fixer.io/latest?base=";
     private String urlString;
 
@@ -22,13 +23,14 @@ public class CurrencyHttpClient {
         InputStream inputStream = null;
 
         try {
+            // Pass in the rate, which will be Euros
             urlString = BASE_URL + URLEncoder.encode(rate, "utf-8");
             Log.d("URL String", urlString);
         } catch (Exception e){
             e.printStackTrace();
         }
-
         try {
+            // Attempt to start a new connection
             connection = (HttpURLConnection) (new URL(urlString)).openConnection();
             connection.setRequestMethod("GET");
             connection.connect();
@@ -37,6 +39,7 @@ public class CurrencyHttpClient {
 
             Log.d("Response code", String.valueOf(response));
 
+            // If we have a response code of 200, proceed
             if(response == HttpURLConnection.HTTP_OK){
                 StringBuilder buffer = new StringBuilder();
                 inputStream = connection.getInputStream();
@@ -49,6 +52,7 @@ public class CurrencyHttpClient {
                 inputStream.close();
                 connection.disconnect();
                 Log.d("JSON",buffer.toString());
+                // Return rates
                 return buffer.toString();
             } else{
                 Log.d("HttpURLConnection","Unable to connect");
@@ -59,6 +63,7 @@ public class CurrencyHttpClient {
             Log.d("HttpURLConnection","Unable to connect");
             e.printStackTrace();
         } finally {
+            // Finally close try to close input stream and connection
             try {
                 inputStream.close();
             } catch (Exception e){

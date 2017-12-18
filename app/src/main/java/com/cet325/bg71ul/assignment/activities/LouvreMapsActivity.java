@@ -44,18 +44,16 @@ public class LouvreMapsActivity extends FragmentActivity implements OnMapReadyCa
     private GoogleMap mMap;
     private GoogleApiClient client;
     private LocationRequest locationRequest;
-    private Location lastlocation;
-    private Marker currentLocationMarker;
     private Spinner googleMapsSpinner = null;
     private ArrayAdapter adapter = null;
     public static final int REQUEST_LOCATION_CODE = 99;
     double latitude,longitude;
+    public boolean active = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_louvre_maps);
-
 
         this.googleMapsSpinner = (Spinner) findViewById(R.id.google_maps_spinner);
         this.googleMapsSpinner.setOnItemSelectedListener(this);
@@ -65,9 +63,9 @@ public class LouvreMapsActivity extends FragmentActivity implements OnMapReadyCa
 
         this.googleMapsSpinner.setAdapter(this.adapter);
 
-
         if (Build.VERSION.SDK_INT >= 23)
         {
+            // Check permissions again when entering this activity
             checkLocationPermission();
 
         }
@@ -90,12 +88,12 @@ public class LouvreMapsActivity extends FragmentActivity implements OnMapReadyCa
                         {
                             bulidGoogleApiClient();
                         }
-                        mMap.setMyLocationEnabled(true);
+
+                        onMapReady(mMap);
                     }
                 }
                 else
                 {
-                    Toast.makeText(this,"Permission Denied" , Toast.LENGTH_LONG).show();
                 }
         }
     }
@@ -104,16 +102,39 @@ public class LouvreMapsActivity extends FragmentActivity implements OnMapReadyCa
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-//        Location location = new Location("");
-//        location.setLatitude(48.86);
-//        location.setLongitude(2.33);
+        // When the map loads, load it on the Louvre Musuem
+        Location location = new Location("");
+        location.setLatitude(48.86);
+        location.setLongitude(2.33);
 
-        //double lat = location.getLatitude()
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+
+        double louvrelatitude = location.getLatitude();
+        double louvrelongitude = location.getLongitude();
+
+        MarkerOptions louvreMarkerOptions = new MarkerOptions();
+        LatLng louvreLatLng = new LatLng(louvrelatitude, louvrelongitude);
+        louvreMarkerOptions.position(louvreLatLng);
+        louvreMarkerOptions.title("We are here");
+        louvreMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             bulidGoogleApiClient();
             mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-            mMap.setMyLocationEnabled(true);
+            mMap.addMarker(louvreMarkerOptions);
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(louvreLatLng));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+        } else{
+            checkLocationPermission();
+            if(!checkLocationPermission()){
+                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                mMap.addMarker(louvreMarkerOptions);
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(louvreLatLng));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                active = true;
+            }
         }
     }
 
@@ -130,33 +151,11 @@ public class LouvreMapsActivity extends FragmentActivity implements OnMapReadyCa
     @Override
     public void onLocationChanged(Location location) {
 
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        lastlocation = location;
-        if(currentLocationMarker != null)
-        {
-            currentLocationMarker.remove();
-
-        }
-        Log.d("lat = ",""+latitude);
-        LatLng latLng = new LatLng(location.getLatitude() , location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Location");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-        currentLocationMarker = mMap.addMarker(markerOptions);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomBy(2));
-
-        if(client != null)
-        {
-            LocationServices.FusedLocationApi.removeLocationUpdates(client,this);
-        }
     }
 
-
-
     private String[] extractValues(double latitude, double longitude, String nearbyPlace){
+        // Extract the latitude and longitude and the searched criteria to do
+        // a Google Places API call
         String values[] = new String[3];
         values[0] = Double.toString(latitude);
         values[1] = Double.toString(longitude);
@@ -197,8 +196,9 @@ public class LouvreMapsActivity extends FragmentActivity implements OnMapReadyCa
             return false;
 
         }
-        else
+        else {
             return true;
+        }
     }
 
 
@@ -213,18 +213,34 @@ public class LouvreMapsActivity extends FragmentActivity implements OnMapReadyCa
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
+
+        // Programmatically change the text colour of the selected spinner item
         ((TextView) this.googleMapsSpinner.getSelectedView()).setTextColor(getResources().getColor(R.color.blackText));
         ((TextView) this.googleMapsSpinner.getSelectedView()).setGravity(Gravity.CENTER);
 
+        // This just stops the maps immediately start searching when the map loads
+        if(!active){
+            active = true;
+            return;
+        }
+
+        // The selected is whatever the spinner value maybe.
         String selected = this.googleMapsSpinner.getSelectedItem().toString();
 
+        // Initialise Object Array
         Object dataTransfer[] = new Object[2];
+        // Initialise JSONGetNearbyPlacesTask
         JSONGetNearbyPlacesTask jsonGetNearbyPlacesTask = new JSONGetNearbyPlacesTask();
 
+        // Clear the map ready for the next search
         mMap.clear();
+        // Extract the values to be added in a String Array
         String[] values = extractValues(latitude,longitude, selected);
+        // Add Google Maps
         dataTransfer[0] = mMap;
+        // Add String array values
         dataTransfer[1] = values;
+        // Execute the task for nearby places.
         jsonGetNearbyPlacesTask.execute(dataTransfer);
 
     }

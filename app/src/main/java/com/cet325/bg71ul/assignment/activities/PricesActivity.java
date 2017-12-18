@@ -69,20 +69,21 @@ public class PricesActivity extends AppCompatActivity {
 
         currencyRates = (List<CurrencyRate>) intent.getSerializableExtra("localCurrencyRates");
 
+        // Checking to see if the currency rates are zero,
+        // if they are zero, the REST API failed to fetch the latest online rates
+        // So we will default back to the previous rates.
         for(CurrencyRate cr: currencyRates){
             if(cr.getCurrencyRate() == 0.0){
                 if(cr.getCurrencyType().equals("GBP")){
                     cr.setCurrencyRate(backUpRates.getFloat("previousGBPRate",0.0f));
-                    usingDefaultRates = true;
                 }
                 if(cr.getCurrencyType().equals("EUR")){
                     cr.setCurrencyRate(backUpRates.getFloat("previousGBPRate",0.0f));
-                    usingDefaultRates = true;
                 }
                 if(cr.getCurrencyType().equals("USD")){
                     cr.setCurrencyRate(backUpRates.getFloat("previousGBPRate",0.0f));
-                    usingDefaultRates = true;
                 }
+                usingDefaultRates = true;
             }
         }
         // If we have failed to fetch latest rates, so we will
@@ -150,31 +151,33 @@ public class PricesActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
+            // Create a new instance of Decimal Format
             DecimalFormat df = new DecimalFormat();
-
+            // Create a new instance of currency converter
             CurrencyConverter currencyConverter = new CurrencyConverter();
-
+            // Get the fragment that will display princes
             View rootView = inflater.inflate(R.layout.fragment_prices, container, false);
-
+            //Show local currency
             TextView localCurrencyTextView = (TextView) rootView.findViewById(R.id.localRates);
             localCurrencyTextView.setText(localCurrency);
-
+            //Show chosen currency
             TextView yourCurrencyTextView = (TextView) rootView.findViewById(R.id.yourCurrency);
             yourCurrencyTextView.setText(yourCurrency);
 
+            // If the chosen currency is GBP, create new instance of decimal format in Pounds
             if(yourCurrency.equals("GBP")){
                 df = new DecimalFormat("'£'0.00");
             }
-
+            // If the chosen currency is EUR, create new instance of decimal format in Euros
             if(yourCurrency.equals("EUR")){
                 df = new DecimalFormat("'€'0.00");
             }
-
+            // If the chosen currency is USD, create new instance of decimal format in US Dollars
             if(yourCurrency.equals("USD")){
                 df = new DecimalFormat("'$'0.00");
             }
 
-
+            // This handles which tab we are currently on
             if(getArguments().getInt(ARG_SECTION_NUMBER) == 1){
                 // Student Tab
                 double totalprice = currencyConverter.calculateStudentPrices(localCurrency, yourCurrency, currencyRates, ticketPrice,studentDiscount);
@@ -192,10 +195,9 @@ public class PricesActivity extends AppCompatActivity {
             if(getArguments().getInt(ARG_SECTION_NUMBER) == 3){
                 // Under 18's tab
                 TextView pricesTextView = (TextView) rootView.findViewById(R.id.priceCost);
+                // Under 18's is free
                 pricesTextView.setText(String.valueOf(df.format(0)));
-
             }
-
             return rootView;
         }
     }
@@ -225,6 +227,7 @@ public class PricesActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
+            // Displays Page titles
             switch (position) {
                 case 0:
                     return "Student";

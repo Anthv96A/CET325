@@ -5,6 +5,7 @@ package com.cet325.bg71ul.assignment.models;
  */
 public class Gallery {
 
+    // POJO for Gallery
     private int id;
     private String artist;
     private String title;

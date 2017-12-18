@@ -39,6 +39,7 @@ public class MuseumDBOpenHelper extends SQLiteOpenHelper{
             DB_KEY_EDITABLE
     };
 
+    // Create table name
     private static final String CREATE_TABLE =
             "CREATE TABLE " + MUSEUM_TABLE_NAME + "( " +
                     DB_KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +

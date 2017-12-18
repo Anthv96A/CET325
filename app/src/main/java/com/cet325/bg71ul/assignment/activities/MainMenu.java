@@ -34,6 +34,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
 
         Intent intent = getIntent();
 
+        // Check local currency rates are not null, otherwise it will fail
         if(intent.getSerializableExtra("localCurrencyRates") != null){
             this.currencyRates = (List<CurrencyRate>) intent.getSerializableExtra("localCurrencyRates");
         }
@@ -70,6 +71,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
         int id = view.getId();
         Intent intent = null;
 
+        // The buttons that will give access to the core functionality of the application
         switch (id){
             case R.id.btn_gallery:
                 intent = new Intent(getApplicationContext(),GalleryActivity.class);
@@ -98,6 +100,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        // This will show the latest prices and your currency
         switch (item.getItemId()){
             case R.id.ticket_prices:{
                 Intent intent = new Intent(this,PricesActivity.class);
@@ -108,7 +111,6 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
             }
 
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

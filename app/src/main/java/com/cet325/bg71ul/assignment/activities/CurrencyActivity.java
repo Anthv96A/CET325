@@ -30,7 +30,7 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
     private int selectedPosition;
     private String yourCurrency;
     private int initialLoading = 0;
-    private boolean error = false;
+    private boolean outOfBoundsError = false;
     private boolean emptyError = false;
     final ViewGroup nullParent = null;
 
@@ -42,6 +42,8 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
         setContentView(R.layout.activity_currency);
 
         this.currencyPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Selected currency
         this.yourCurrency = currencyPreferences.getString("yourCurrency", "DEFAULT");
 
         // get currencies from string array resources
@@ -117,10 +119,12 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
 
     private void editStudentDiscount() {
 
-        if(error){
+        // This error is checking to make sure user doesn't put a ridiculous percentage value
+        if(outOfBoundsError){
             Toast.makeText(this, "Your value is out of bounds", Toast.LENGTH_SHORT).show();
         }
 
+        // This error is making sure we can't
         if(emptyError){
             Toast.makeText(this, "You can't submit an empty value", Toast.LENGTH_SHORT).show();
         }
@@ -146,14 +150,14 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
                 String newPrice = txtNewStudentDiscount.getText().toString();
                 if(newPrice == null || newPrice.isEmpty()){
                     emptyError = true;
-                    error = false;
+                    outOfBoundsError = false;
                     editStudentDiscount();
                     return;
                 }
 
                 double check = Double.parseDouble(txtNewStudentDiscount.getText().toString());
                 if(check > 100 || check <= 0 ){
-                    error = true;
+                    outOfBoundsError = true;
                     emptyError = false;
                     editStudentDiscount();
                     return;
@@ -162,7 +166,7 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
 
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
                         .putString("studentDiscount", newPrice).apply();
-                error = false;
+                outOfBoundsError = false;
                 emptyError = false;
                 Toast.makeText(CurrencyActivity.this, "Updated", Toast.LENGTH_SHORT).show();
             }

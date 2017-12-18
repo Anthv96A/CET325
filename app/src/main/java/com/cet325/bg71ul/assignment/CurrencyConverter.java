@@ -11,37 +11,38 @@ import java.util.List;
 public class CurrencyConverter {
 
 
+    // Calculates prices for over 18's
     public double calculatePrices(String localCurrency, String yourCurrency, List<CurrencyRate> rates, double ticketPrice){
-
-        final double admissionPrice = ticketPrice;
 
         float exchangeRate = 0;
 
         for(CurrencyRate cr: rates){
             if(yourCurrency.equals(cr.getCurrencyType())){
+                // Extract the rate from your selected currency
                 exchangeRate = cr.getCurrencyRate();
             }
         }
 
+        // Local currency being Euros
         if(yourCurrency.equals(localCurrency)){
-            return admissionPrice;
+            return ticketPrice;
         }
 
         if(yourCurrency.equals("GBP")){
-            return exchangeRate * admissionPrice;
+            return exchangeRate * ticketPrice;
         }
 
         if(yourCurrency.equals("USD")){
-            return exchangeRate * admissionPrice;
+            return exchangeRate * ticketPrice;
         }
 
-        return admissionPrice;
+        return ticketPrice;
 
     }
 
+    // Calculates student prices
     public double calculateStudentPrices(String localCurrency, String yourCurrency, List<CurrencyRate> rates, double ticketPrice, double studentDiscount){
 
-        final double admissionPrice = ticketPrice;
         final double admissionStudentDiscount = (studentDiscount / 100);
 
         float exchangeRate = 0;
@@ -52,19 +53,20 @@ public class CurrencyConverter {
             }
         }
 
+        // Local currency being Euros
         if(yourCurrency.equals(localCurrency)){
-            return (admissionPrice) - (admissionPrice * admissionStudentDiscount);
+            return (ticketPrice) - (ticketPrice * admissionStudentDiscount);
         }
 
         if(yourCurrency.equals("GBP")){
-            return (exchangeRate * admissionPrice ) - (exchangeRate * admissionPrice * admissionStudentDiscount);
+            return (exchangeRate * ticketPrice ) - (exchangeRate * ticketPrice * admissionStudentDiscount);
         }
 
         if(yourCurrency.equals("USD")){
-            return (exchangeRate * admissionPrice ) - (exchangeRate * admissionPrice * admissionStudentDiscount);
+            return (exchangeRate * ticketPrice ) - (exchangeRate * ticketPrice * admissionStudentDiscount);
         }
 
-        return admissionPrice * admissionStudentDiscount;
+        return ticketPrice * admissionStudentDiscount;
 
     }
 }

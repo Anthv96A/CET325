@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class CurrencyRate implements Serializable{
 
+    // POJO for Currency rates from Fixer.IO
     private String currencyType;
     private float currencyRate;
 

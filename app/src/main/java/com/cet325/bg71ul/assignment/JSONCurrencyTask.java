@@ -31,6 +31,7 @@ public class JSONCurrencyTask extends AsyncTask<String, Void, CurrencyRate> {
             return currencyRate;
         }
 
+        // If the data is null, set rate to 0.0
         currencyRate.setCurrencyType(strings[0]);
         currencyRate.setCurrencyRate(0);
         return currencyRate;
@@ -56,9 +57,7 @@ public class JSONCurrencyTask extends AsyncTask<String, Void, CurrencyRate> {
             try {
                 CurrencyRate currencyRate = task.get();
                 currencyRates.add(currencyRate);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

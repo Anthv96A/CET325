@@ -14,12 +14,17 @@ import java.net.URL;
 
 public class NearbyPlacesHttpClient {
 
+    // Google Places URL
     private static final String GOOGLE_PLACES_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
     private static String location;
+    // Distance radius around location
     private static final String distanceRadius = "&radius=10000";
     private static String nearbyPlace;
+    // Sensor true
     private static final String sensor = "&sensor=true";
+    // Anthony Vest's Google Places API key, this key is not the same as Google Maps
     private static final String API_KEY = "&key=AIzaSyBU58QUYxRfxD3zYgIy5asnxV-96mYVjYk";
+    // Concatenate all the values together
     private static String finalURL;
 
 
@@ -52,7 +57,7 @@ public class NearbyPlacesHttpClient {
                 inputStream = urlConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-                String line = "";
+                String line;
 
                 while ((line = bufferedReader.readLine()) != null){
                     buffer.append(line);
@@ -61,6 +66,7 @@ public class NearbyPlacesHttpClient {
                 inputStream.close();
                 urlConnection.disconnect();
                 Log.d("Places",buffer.toString());
+                // Return places based on user request
                 return buffer.toString();
             } else {
                 Log.d("Bad response ", String.valueOf(response));
@@ -70,6 +76,7 @@ public class NearbyPlacesHttpClient {
             Log.d("HttpURLConnection","Unable to connect");
             e.printStackTrace();
         } finally {
+            // Finally try and close input stream and url connection
             try {
                 inputStream.close();
             } catch (Exception e){

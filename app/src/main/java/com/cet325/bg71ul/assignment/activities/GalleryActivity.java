@@ -196,7 +196,6 @@ public class GalleryActivity extends AppCompatActivity
             case R.id.sortRank:
                 makeQuery(5);
                 break;
-
         }
 
         return true;
@@ -217,6 +216,7 @@ public class GalleryActivity extends AppCompatActivity
         cursorAdapter.swapCursor(null);
     }
 
+    // This method is responsible for all the different query criteria
     public void makeQuery(int index){
         this.list = (ListView) findViewById(R.id.listView_gallery);
 
@@ -346,6 +346,7 @@ public class GalleryActivity extends AppCompatActivity
         final AlertDialog.Builder createNewGallery = new AlertDialog.Builder(GalleryActivity.this);
         createNewGallery.setView(getGalleryIdView);
 
+        // If there are bad inputs from user, it will recursively call createDialog and will increment by one
         if(checker > 0){
             Toast.makeText(GalleryActivity.this, "Please insert into Artist, Title and Year.", Toast.LENGTH_LONG).show();
         }
@@ -386,13 +387,13 @@ public class GalleryActivity extends AppCompatActivity
                     gallery.setYear(yearInput.getText().toString());
                     createNewGallery(gallery, view);
                 }
-
             }
         }).create().show();
 
     }
 
 
+    // Every time we create a new record, we will use this record to create default image
     public String setUpDefaultImage(){
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.profile_pic);
@@ -418,13 +419,13 @@ public class GalleryActivity extends AppCompatActivity
     }
 
 
+    // Adapter listener
     private AdapterView.OnItemClickListener clicked = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-            String selected;
             Cursor cursor = (Cursor) list.getItemAtPosition(i);
-            selected = cursor.getString(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_ID));
+            String selected = cursor.getString(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_ID));
 
             Intent detailsIntent = new Intent(view.getContext(), DetailActivity.class);
             detailsIntent.putExtra("id", selected);

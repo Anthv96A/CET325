@@ -21,6 +21,7 @@ public class MuseumProvider extends ContentProvider {
 
     private SQLiteDatabase db;
 
+    // Package path
     private static final String AUTHORITY = "com.cet325.bg71ul.assignment";
     private static final String BASE_PATH = "museum";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
@@ -40,6 +41,7 @@ public class MuseumProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
+        // Fetch database
         MuseumDBOpenHelper museumDBOpenHelper = new MuseumDBOpenHelper(getContext());
         db = museumDBOpenHelper.getWritableDatabase();
         return true;
@@ -50,6 +52,7 @@ public class MuseumProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] strings, String s, String[] strings1, String s1) {
         Cursor cursor = null;
 
+        // We we query data, fetch all and order by id.
         switch (uriMatcher.match(uri)){
             case MUSEUM:
                 cursor = db.query(
@@ -83,6 +86,7 @@ public class MuseumProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
+        // Insert record
         long id = db.insert(MuseumDBOpenHelper.MUSEUM_TABLE_NAME, null, contentValues);
         if(id > 0){
             Uri _uri = ContentUris.withAppendedId(CONTENT_URI, id);
@@ -95,6 +99,7 @@ public class MuseumProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
+        // Delete record
         int deletedCount = 0;
         switch (uriMatcher.match(uri)){
             case MUSEUM:
@@ -110,6 +115,7 @@ public class MuseumProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
+        // Update record
         int updatedCount = 0;
         switch (uriMatcher.match(uri)){
             case MUSEUM:

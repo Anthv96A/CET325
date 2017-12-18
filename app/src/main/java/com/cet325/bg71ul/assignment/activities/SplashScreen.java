@@ -35,6 +35,7 @@ import java.util.List;
 public class SplashScreen extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
 
+    // Splash screen self executed method duration
     private static final int DURATION = 2000;
     private static final int WRITE_TO_EXTERNAL_STORAGE = 0;
     public static final int REQUEST_LOCATION_CODE = 99;
@@ -46,12 +47,13 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
         setContentView(R.layout.activity_splash_screen);
 
 
-        // Delayed self excuted method, to check for permissions
+        // Delayed self executed method, to check for permissions
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
 
                 try{
+                    // If API level is over 23, ask permissions
                     if(Build.VERSION.SDK_INT >= 23 ){
                         checkPermissions();
                     }
@@ -59,26 +61,35 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                     if(ContextCompat.checkSelfPermission(getApplicationContext(),
                             android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
 
+                        // If the database is not empty, continue. We don't want to keep pre-populating.
                         if(getContentResolver().query(MuseumProvider.CONTENT_URI,null,null,null,null).getCount() != 0){
 
+                            // This is the default Shared Preferences
                             SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
+                            // This is the Shared Preferences that will store different rates
                             SharedPreferences storedRates = getSharedPreferences("rates",Context.MODE_PRIVATE);
+                            // Getting ready to edit different rates for each currency
                             SharedPreferences.Editor editor = storedRates.edit();
 
+                            // Get Local currency as we need new rates every time the app loads.
                             String localCurrency = mSharedPreferences.getString("localCurrency","DEFAULT");
+                            // List of currency rates
                             List<CurrencyRate> localCurrencyRates = new ArrayList<CurrencyRate>();
 
                             try{
+                                // Initialise JSON Currency Task
                                 JSONCurrencyTask jsonCurrencyTask = new JSONCurrencyTask();
                                 // Ensure the currency task completes
                                 Thread sleeperThread = new Thread();
                                 try {
+                                    // Sleep for one second
                                     sleeperThread.sleep(1000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
 
+                                // Checking what is coming back from Async Event
                                 for(CurrencyRate cr: jsonCurrencyTask.fetchCurrencyRates(
                                         getResources().getStringArray(R.array.currencies),
                                         localCurrency) ){
@@ -86,6 +97,7 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                                     Log.d("For each cr ", String.valueOf(cr.getCurrencyRate()));
                                 }
 
+                                // Add all the types and rates from Async event to list
                                 localCurrencyRates.addAll(jsonCurrencyTask.fetchCurrencyRates(
                                         getResources().getStringArray(R.array.currencies),
                                         localCurrency));
@@ -123,9 +135,12 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                                 e.printStackTrace();
 
                             } finally {
+                                // Finally we will start the main activity with the local currency rates
                                 Intent mainMenuIntent = new Intent(getApplicationContext(), MainMenu.class);
                                 mainMenuIntent.putExtra("localCurrencyRates", (Serializable) localCurrencyRates);
+                                // Start Activity
                                 startActivity(mainMenuIntent);
+                                // Finish SplashScreen Activity
                                 finish();
                             }
 
@@ -144,19 +159,17 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
 
     public void checkPermissions(){
 
+        // Permissions needed
         String[] permissions = new String[]{
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.ACCESS_FINE_LOCATION
         };
 
-        int[] codes = new int[]{
-                REQUEST_LOCATION_CODE,
-                WRITE_TO_EXTERNAL_STORAGE
-        };
-
         int result;
+        // New list of permissions needed
         List<String> permissionsNeeded = new ArrayList<>();
 
+        // Add permissions we need
         for(String permission: permissions){
             result = ContextCompat.checkSelfPermission(this, permission);
             if(result != PackageManager.PERMISSION_GRANTED){
@@ -164,13 +177,14 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
             }
         }
 
+        // Convert list into array
         String[] permissionsArray = permissionsNeeded.toArray( new String[permissionsNeeded.size()]);
 
+        // If the list is not empty, we need to request user permission
         if(!permissionsNeeded.isEmpty()){
             ActivityCompat.requestPermissions(this,permissionsArray,WRITE_TO_EXTERNAL_STORAGE);
         }
     }
-
 
 
     @Override
@@ -178,7 +192,6 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
         switch (requestCode) {
             case WRITE_TO_EXTERNAL_STORAGE: {
                 // If request is cancelled, the result arrays are empty.
-                boolean storagePermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     if(getContentResolver().query(MuseumProvider.CONTENT_URI,null,null,null,null).getCount() == 0) {
@@ -187,11 +200,11 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                         SharedPreferences storedRates = getSharedPreferences("rates",Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = storedRates.edit();
 
-
                         // On start up, set up the default currencies
                         PreferenceManager.getDefaultSharedPreferences(this).edit()
                                 .putString("localCurrency", "EUR").apply();
 
+                        // We need to make sure on the first run, the selected currency is in Euros too
                         PreferenceManager.getDefaultSharedPreferences(this).edit()
                                 .putString("yourCurrency", "EUR").apply();
 
@@ -202,10 +215,10 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                         PreferenceManager.getDefaultSharedPreferences(this).edit()
                                 .putString("studentDiscount", "30").apply();
 
-
+                        // Fetch the local currency Euros
                         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
                         String localCurrency = mSharedPreferences.getString("localCurrency","DEFAULT");
-
+                        // List of currency rates
                         List<CurrencyRate> localCurrencyRates = new ArrayList<CurrencyRate>();
 
                         try{
@@ -213,10 +226,13 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                             // Ensure the currency task completes
                             Thread sleeperThread = new Thread();
                             try {
+                                // Sleep thread for one second
                                 sleeperThread.sleep(1000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+
+                            // Add all rates and types to list
                             localCurrencyRates.addAll(jsonCurrencyTask.fetchCurrencyRates(
                                     getResources().getStringArray(R.array.currencies),
                                     localCurrency));
@@ -252,9 +268,11 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                             e.printStackTrace();
 
                         } finally {
+                            // Start up the main menu activity and pass in the new rates
                             Intent mainMenuIntent = new Intent(getApplicationContext(), MainMenu.class);
                             mainMenuIntent.putExtra("localCurrencyRates", (Serializable) localCurrencyRates);
                             startActivity(mainMenuIntent);
+                            // Finish Splash Screen Activity
                             finish();
                         }
 
@@ -272,6 +290,8 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
     }
 
     private void initialiseDatabase() {
+
+        // Pre-loaded data at run time.
 
         // 1.
        createGallery(
@@ -315,7 +335,7 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                 "The scene depicts the Virgin Mary crowned by a hovering Angel while she presents the Infant Jesus to Rolin. It is set within a spacious Italian-style loggia with a rich decoration of columns and bas-reliefs. In the background is a landscape with a city on a river, probably intended to be Autun in Burgundy, Rolin's hometown. "+"" +
                         " A wide range of well detailed palaces, churches, an island, a towered bridge, hills and fields is portrayed, subject to a uniform light. Perhaps some of the Chancellor's many landholdings around Autun are included in the vista",
                 "Room 22",
-                1.5,
+                0,
                 1435,
                 R.drawable.chancellor_rolin
         );

@@ -31,7 +31,6 @@ import java.io.File;
 public class DetailActivity extends AppCompatActivity {
 
     private String getID;
-    private int selected;
     private boolean canEditFully;
     private float rank;
     private String title;
@@ -74,15 +73,12 @@ public class DetailActivity extends AppCompatActivity {
     }
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         Intent intent = getIntent();
         getID = intent.getStringExtra("id");
-        selected = Integer.parseInt(getID);
 
 
         artistTextView = (TextView) findViewById(R.id.txtArtist);
@@ -161,6 +157,7 @@ public class DetailActivity extends AppCompatActivity {
         MuseumDBOpenHelper museumDBOpenHelper = new MuseumDBOpenHelper(this);
         SQLiteDatabase sqLiteDatabase = museumDBOpenHelper.getReadableDatabase();
 
+        // Fetch record that the user has clicked
         Cursor cursor = sqLiteDatabase.query(
                 MuseumDBOpenHelper.MUSEUM_TABLE_NAME,
                 museumDBOpenHelper.ALL_COLUMNS,
@@ -181,7 +178,7 @@ public class DetailActivity extends AppCompatActivity {
 
         if(canEditFully){
             // The can edit fully is a boolean value that checks from the database where we can either
-            // edit pre-loaded rank or fully edit a manually added rank.
+            // edit pre-loaded rank, or fully edit a manually added rank.
             editAllFieldsDialog();
         } else {
             editOnlyRankDialog();
@@ -211,7 +208,7 @@ public class DetailActivity extends AppCompatActivity {
         if(yearTextView.getText().toString() != null){
             editGallery.setYear(yearTextView.getText().toString());
         } else{
-            editGallery.setYear("2017");
+            editGallery.setYear(new String());
         }
 
         if(roomTextView.getText().toString() != null){
