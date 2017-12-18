@@ -27,6 +27,7 @@ import com.cet325.bg71ul.assignment.MuseumProvider;
 import com.cet325.bg71ul.assignment.R;
 
 import java.io.File;
+import java.util.Calendar;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -35,6 +36,7 @@ public class DetailActivity extends AppCompatActivity {
     private float rank;
     private String title;
     private static int checker = 0;
+    private static int outOutBoundsYear = 0;
     RatingBar edited;
     TextView artistTextView = null;
     TextView yearTextView = null;
@@ -188,9 +190,15 @@ public class DetailActivity extends AppCompatActivity {
 
 
     private void editAllFieldsDialog(){
+        final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
         if(checker > 0){
+            outOutBoundsYear = 0;
             Toast.makeText(this, "You can't leave the fields: Title, Artist and Year blank", Toast.LENGTH_SHORT).show();
+        }
+
+        if(outOutBoundsYear > 0){
+            Toast.makeText(this,"You are trying to add a year greater than " + currentYear ,Toast.LENGTH_SHORT).show();
         }
 
         LayoutInflater layoutInflater = LayoutInflater.from(DetailActivity.this);
@@ -250,10 +258,13 @@ public class DetailActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Toast.makeText(DetailActivity.this, "Dismissed", Toast.LENGTH_SHORT).show();
                 checker = 0;
+                outOutBoundsYear = 0;
                 dialog.dismiss();
             }
         }).setPositiveButton("Edit", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int whichButton) {
+
+
 
                 if(artistTextView.getText().toString() == " " || artistDialogTextview.getText().toString().isEmpty()
                         || titleDialogTextview.getText().toString() == " " || titleDialogTextview.getText().toString().isEmpty()
@@ -262,7 +273,15 @@ public class DetailActivity extends AppCompatActivity {
                     editAllFieldsDialog();
                     return;
                 }
+
+                if(Double.parseDouble(yearDialogTextview.getText().toString()) > currentYear){
+                    outOutBoundsYear++;
+                    editAllFieldsDialog();
+                    return;
+                }
+
                 checker = 0;
+                outOutBoundsYear = 0;
                 String where = "_id = " + getID;
                 ContentValues values = new ContentValues();
                 values.put(MuseumDBOpenHelper.DB_KEY_ARTIST, artistDialogTextview.getText().toString());

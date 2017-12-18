@@ -41,12 +41,15 @@ import com.cet325.bg71ul.assignment.R;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.math.BigInteger;
+import java.util.Calendar;
 
 public class GalleryActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener{
     private CursorAdapter cursorAdapter = null;
     private ListView list;
     public static int checker = 0;
+    private static int outOutBoundsYear = 0;
     private int selected;
     final ViewGroup nullParent = null;
 
@@ -340,16 +343,26 @@ public class GalleryActivity extends AppCompatActivity
 
     private void createDialog(final View view){
 
+        final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+
+        // If there are bad inputs from user, it will recursively call createDialog and will increment by one
+        if(checker > 0){
+            // Reset value because we know no input has been added
+            outOutBoundsYear = 0;
+            Toast.makeText(GalleryActivity.this, "Please insert into Artist, Title and Year.", Toast.LENGTH_LONG).show();
+        }
+
+        if(outOutBoundsYear > 0){
+            Toast.makeText(this,"You are trying to add a year greater than " + currentYear ,Toast.LENGTH_SHORT).show();
+        }
+
         LayoutInflater li = LayoutInflater.from(GalleryActivity.this);
         View getGalleryIdView = li.inflate(R.layout.dialog_add_new_gallery,nullParent);
 
         final AlertDialog.Builder createNewGallery = new AlertDialog.Builder(GalleryActivity.this);
         createNewGallery.setView(getGalleryIdView);
 
-        // If there are bad inputs from user, it will recursively call createDialog and will increment by one
-        if(checker > 0){
-            Toast.makeText(GalleryActivity.this, "Please insert into Artist, Title and Year.", Toast.LENGTH_LONG).show();
-        }
 
         final EditText artistInput = (EditText) getGalleryIdView.findViewById(R.id.editTextDialogArtistInput);
         final EditText titleInput = (EditText) getGalleryIdView.findViewById(R.id.editTextDialogTitleInput);
@@ -361,6 +374,7 @@ public class GalleryActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 checker = 0;
+                outOutBoundsYear = 0;
                 Snackbar snackbar = Snackbar.make(view, "Action Cancelled", Snackbar.LENGTH_SHORT);
 
                 snackbar.setAction("Action",null).show();
@@ -378,7 +392,17 @@ public class GalleryActivity extends AppCompatActivity
                     checker++;
                     // Recursive method call to dialog if mandatory fields are not met.
                     createDialog(view);
-                } else {
+                    return;
+                }
+
+                
+                if(Double.parseDouble(yearInput.getText().toString()) > currentYear){
+                    outOutBoundsYear++;
+                    createDialog(view);
+                    return;
+                }
+
+
                     Gallery gallery = new Gallery();
                     gallery.setArtist(artistInput.getText().toString());
                     gallery.setTitle(titleInput.getText().toString());
@@ -386,7 +410,7 @@ public class GalleryActivity extends AppCompatActivity
                     gallery.setDescription(descriptionInput.getText().toString());
                     gallery.setYear(yearInput.getText().toString());
                     createNewGallery(gallery, view);
-                }
+
             }
         }).create().show();
 

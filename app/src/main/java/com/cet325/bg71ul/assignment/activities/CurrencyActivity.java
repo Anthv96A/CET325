@@ -141,6 +141,8 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
 
         alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
+                outOfBoundsError = false;
+                emptyError = false;
                 Toast.makeText(CurrencyActivity.this, "Dismissed", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
@@ -192,6 +194,8 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
 
         alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
+                outOfBoundsError = false;
+                emptyError = false;
                 Toast.makeText(CurrencyActivity.this, "Dismissed", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
