@@ -40,9 +40,15 @@ public class JSONGetNearbyPlacesTask extends AsyncTask<Object,String,String> {
             e.printStackTrace();
         }
 
-        Log.d("googlePlacesData", googlePlacesData);
 
-        return googlePlacesData;
+        if(googlePlacesData != null){
+            Log.d("googlePlacesData", googlePlacesData);
+
+            return googlePlacesData;
+        }
+
+        return "Could not fetch data";
+
     }
 
     @Override

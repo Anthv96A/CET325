@@ -75,14 +75,19 @@ public class PlacesParser {
             e.printStackTrace();
         }
 
-        for(int i = 0; i < jsonArray.length(); i++){
-            try{
-                // Pass in JSON array to extract into hash map
-                places.add(this.getPlace((JSONObject) jsonArray.get(i)));
-            } catch (Exception e){
-                e.printStackTrace();
+        try{
+            for(int i = 0; i < jsonArray.length(); i++){
+                try{
+                    // Pass in JSON array to extract into hash map
+                    places.add(this.getPlace((JSONObject) jsonArray.get(i)));
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
+        } catch (RuntimeException e){
+            e.printStackTrace();
         }
+
         return places;
 
     }
