@@ -395,7 +395,7 @@ public class GalleryActivity extends AppCompatActivity
                     return;
                 }
 
-                
+
                 if(Double.parseDouble(yearInput.getText().toString()) > currentYear){
                     outOutBoundsYear++;
                     createDialog(view);
