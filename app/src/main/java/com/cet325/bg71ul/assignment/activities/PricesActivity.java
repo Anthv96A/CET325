@@ -78,10 +78,10 @@ public class PricesActivity extends AppCompatActivity {
                     cr.setCurrencyRate(backUpRates.getFloat("previousGBPRate",0.0f));
                 }
                 if(cr.getCurrencyType().equals("EUR")){
-                    cr.setCurrencyRate(backUpRates.getFloat("previousGBPRate",0.0f));
+                    cr.setCurrencyRate(backUpRates.getFloat("previousEURRate",0.0f));
                 }
                 if(cr.getCurrencyType().equals("USD")){
-                    cr.setCurrencyRate(backUpRates.getFloat("previousGBPRate",0.0f));
+                    cr.setCurrencyRate(backUpRates.getFloat("previousUSDRate",0.0f));
                 }
                 usingDefaultRates = true;
             }

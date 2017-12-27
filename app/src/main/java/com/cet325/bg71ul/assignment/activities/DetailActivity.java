@@ -31,12 +31,10 @@ import java.util.Calendar;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private String getID;
+    private String ID;
     private boolean canEditFully;
     private float rank;
     private String title;
-    private static int checker = 0;
-    private static int outOutBoundsYear = 0;
     RatingBar edited;
     TextView artistTextView = null;
     TextView yearTextView = null;
@@ -45,6 +43,14 @@ public class DetailActivity extends AppCompatActivity {
     RatingBar rankRatingBar = null;
     ImageView galleryImage = null;
     final ViewGroup nullParent = null;
+
+    public String getID(){
+        return this.ID;
+    }
+
+    public void setID(String ID){
+        this.ID = ID;
+    }
 
     public float getRank(){
         return this.rank;
@@ -80,7 +86,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         Intent intent = getIntent();
-        getID = intent.getStringExtra("id");
+        setID(intent.getStringExtra("id"));
 
 
         artistTextView = (TextView) findViewById(R.id.txtArtist);
@@ -164,7 +170,7 @@ public class DetailActivity extends AppCompatActivity {
                 MuseumDBOpenHelper.MUSEUM_TABLE_NAME,
                 museumDBOpenHelper.ALL_COLUMNS,
                 museumDBOpenHelper.DB_KEY_ID + " = ?",
-                new String[]{getID},
+                new String[]{getID()},
                 null,
                 null,
                 null
@@ -180,7 +186,7 @@ public class DetailActivity extends AppCompatActivity {
 
         if(canEditFully){
             // The can edit fully is a boolean value that checks from the database where we can either
-            // edit pre-loaded rank, or fully edit a manually added rank.
+            // edit pre-loaded rank, or fully edit a manually added record.
             editAllFieldsDialog();
         } else {
             editOnlyRankDialog();
@@ -192,14 +198,6 @@ public class DetailActivity extends AppCompatActivity {
     private void editAllFieldsDialog(){
         final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
-        if(checker > 0){
-            outOutBoundsYear = 0;
-            Toast.makeText(this, "You can't leave the fields: Title, Artist and Year blank", Toast.LENGTH_SHORT).show();
-        }
-
-        if(outOutBoundsYear > 0){
-            Toast.makeText(this,"You are trying to add a year greater than " + currentYear ,Toast.LENGTH_SHORT).show();
-        }
 
         LayoutInflater layoutInflater = LayoutInflater.from(DetailActivity.this);
         View getEditDialog = layoutInflater.inflate(R.layout.edit_anyfield,nullParent);
@@ -257,8 +255,6 @@ public class DetailActivity extends AppCompatActivity {
         alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int whichButton) {
                 Toast.makeText(DetailActivity.this, "Dismissed", Toast.LENGTH_SHORT).show();
-                checker = 0;
-                outOutBoundsYear = 0;
                 dialog.dismiss();
             }
         }).setPositiveButton("Edit", new DialogInterface.OnClickListener(){
@@ -269,20 +265,30 @@ public class DetailActivity extends AppCompatActivity {
                 if(artistTextView.getText().toString() == " " || artistDialogTextview.getText().toString().isEmpty()
                         || titleDialogTextview.getText().toString() == " " || titleDialogTextview.getText().toString().isEmpty()
                         || yearDialogTextview.getText().toString().isEmpty() || yearTextView.getText().toString() == ""){
-                    checker ++;
+                    // Need to run on the current UI thread for toast to warn about missing fields
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(DetailActivity.this, "Please insert into Artist, Title and Year.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     editAllFieldsDialog();
                     return;
                 }
 
                 if(Double.parseDouble(yearDialogTextview.getText().toString()) > currentYear){
-                    outOutBoundsYear++;
+                    // Need to run on the current UI thread for toast to warn about missing fields
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(DetailActivity.this, "You are trying to add a year greater than " + currentYear , Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     editAllFieldsDialog();
                     return;
                 }
 
-                checker = 0;
-                outOutBoundsYear = 0;
-                String where = "_id = " + getID;
+                String where = "_id = " + getID();
                 ContentValues values = new ContentValues();
                 values.put(MuseumDBOpenHelper.DB_KEY_ARTIST, artistDialogTextview.getText().toString());
                 values.put(MuseumDBOpenHelper.DB_KEY_TITLE, titleDialogTextview.getText().toString());
@@ -295,7 +301,7 @@ public class DetailActivity extends AppCompatActivity {
                 // After editing, we redirect back to newly edited ranking.
                 // Ensure we pass the id, otherwise it will fail
                 Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                intent.putExtra("id", getID);
+                intent.putExtra("id", getID());
                 startActivity(intent);
 
             }
@@ -323,7 +329,7 @@ public class DetailActivity extends AppCompatActivity {
         }).setPositiveButton("Edit", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
-                String where = "_id = " + getID;
+                String where = "_id = " + getID();
 
                 ContentValues values = new ContentValues();
                 values.put(MuseumDBOpenHelper.DB_KEY_RANK, edited.getRating());
@@ -332,7 +338,7 @@ public class DetailActivity extends AppCompatActivity {
                 // After editing, we redirect back to newly edited ranking.
                 // Ensure we pass the id, otherwise it will fail
                 Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                intent.putExtra("id", getID);
+                intent.putExtra("id", getID());
                 startActivity(intent);
             }
         }).create().show();

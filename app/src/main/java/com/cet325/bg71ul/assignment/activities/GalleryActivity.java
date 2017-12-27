@@ -50,8 +50,6 @@ public class GalleryActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener{
     private CursorAdapter cursorAdapter = null;
     private ListView list;
-    public static int checker = 0;
-    private static int outOutBoundsYear = 0;
     private int selected;
     final ViewGroup nullParent = null;
 
@@ -262,12 +260,12 @@ public class GalleryActivity extends AppCompatActivity
                     // If ranked is selected, then order by artist and title
                     where =  MuseumDBOpenHelper.DB_KEY_RANK + " != ?";
                     selectionArgs = new String[]{"0"};
-                    orderBy = MuseumDBOpenHelper.DB_KEY_ARTIST + " asc";
+                    orderBy = MuseumDBOpenHelper.DB_KEY_ARTIST + " asc, " + MuseumDBOpenHelper.DB_KEY_TITLE + " asc";
                 } else if(this.selected ==3){
                     // If NOT rank is selected, then order by artist and title
                     where =  MuseumDBOpenHelper.DB_KEY_RANK + " = ?";
                     selectionArgs = new String[]{"0"};
-                    orderBy = MuseumDBOpenHelper.DB_KEY_ARTIST + " asc";
+                    orderBy = MuseumDBOpenHelper.DB_KEY_ARTIST + " asc, " + MuseumDBOpenHelper.DB_KEY_TITLE + " asc";
                 }
 
                 break;
@@ -348,17 +346,6 @@ public class GalleryActivity extends AppCompatActivity
         final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
 
-        // If there are bad inputs from user, it will recursively call createDialog and will increment by one
-        if(checker > 0){
-            // Reset value because we know no input has been added
-            outOutBoundsYear = 0;
-            Toast.makeText(GalleryActivity.this, "Please insert into Artist, Title and Year.", Toast.LENGTH_LONG).show();
-        }
-
-        if(outOutBoundsYear > 0){
-            Toast.makeText(this,"You are trying to add a year greater than " + currentYear ,Toast.LENGTH_SHORT).show();
-        }
-
         LayoutInflater li = LayoutInflater.from(GalleryActivity.this);
         View getGalleryIdView = li.inflate(R.layout.dialog_add_new_gallery,nullParent);
 
@@ -375,8 +362,7 @@ public class GalleryActivity extends AppCompatActivity
         createNewGallery.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                checker = 0;
-                outOutBoundsYear = 0;
+
                 Snackbar snackbar = Snackbar.make(view, "Action Cancelled", Snackbar.LENGTH_SHORT);
 
                 snackbar.setAction("Action",null).show();
@@ -388,22 +374,31 @@ public class GalleryActivity extends AppCompatActivity
                         || titleInput.getText().toString().trim().isEmpty() || titleInput.getText().length() == 0
                         || yearInput.getText().toString().trim().isEmpty() || yearInput.getText().length() == 0
                         ) {
-                    // When we first call the dialog, we don't want to tell the user about
-                    // mandatory fields. If they haven't added them, the recursive method
-                    // check whether the fields were not answered.
-                    checker++;
+
+                    // Need to run on the current UI thread for toast to warn about missing fields
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(GalleryActivity.this, "Please insert into Artist, Title and Year.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     // Recursive method call to dialog if mandatory fields are not met.
                     createDialog(view);
                     return;
                 }
 
-
                 if(Double.parseDouble(yearInput.getText().toString()) > currentYear){
-                    outOutBoundsYear++;
+                    // Need to run on the current UI thread for toast to warn about missing fields
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(GalleryActivity.this, "You are trying to add a year greater than " + currentYear , Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    // Recursive method call to dialog if mandatory fields are not met.
                     createDialog(view);
                     return;
                 }
-
 
                     Gallery gallery = new Gallery();
                     gallery.setArtist(artistInput.getText().toString());
