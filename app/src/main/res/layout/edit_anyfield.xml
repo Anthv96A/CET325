@@ -13,20 +13,10 @@
         android:layout_marginTop="18dp"
         android:layout_gravity="center"
         android:layout_marginBottom="2sp"
-        android:text="@string/rate_gallery"
+        android:text="@string/edit_gallery"
         android:textColor="@color/blackText"
         android:textSize="24sp"
         android:textStyle="bold" />
-
-
-    <RatingBar
-        android:id="@+id/ratingBarAny"
-        android:theme="@style/RatingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        />
-
 
     <EditText
         android:id="@+id/editTextDialogArtistInput"

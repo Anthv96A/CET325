@@ -30,8 +30,6 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
     private int selectedPosition;
     private String yourCurrency;
     private int initialLoading = 0;
-    private boolean outOfBoundsError = false;
-    private boolean emptyError = false;
     final ViewGroup nullParent = null;
 
     @Override
@@ -84,7 +82,6 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
 
         initialLoading++;
 
-
     }
 
     @Override
@@ -119,15 +116,6 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
 
     private void editStudentDiscount() {
 
-        // This error is checking to make sure user doesn't put a ridiculous percentage value
-        if(outOfBoundsError){
-            Toast.makeText(this, "Your value is out of bounds", Toast.LENGTH_SHORT).show();
-        }
-
-        // This error is making sure we can't
-        if(emptyError){
-            Toast.makeText(this, "You can't submit an empty value", Toast.LENGTH_SHORT).show();
-        }
 
         LayoutInflater layoutInflater = LayoutInflater.from(CurrencyActivity.this);
         View getEditDialog = layoutInflater.inflate(R.layout.edit_student_discount, nullParent);
@@ -141,8 +129,6 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
 
         alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                outOfBoundsError = false;
-                emptyError = false;
                 Toast.makeText(CurrencyActivity.this, "Dismissed", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
@@ -151,25 +137,31 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
 
                 String newPrice = txtNewStudentDiscount.getText().toString();
                 if(newPrice == null || newPrice.isEmpty()){
-                    emptyError = true;
-                    outOfBoundsError = false;
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(CurrencyActivity.this, "You can't submit an empty value", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     editStudentDiscount();
                     return;
                 }
 
                 double check = Double.parseDouble(txtNewStudentDiscount.getText().toString());
                 if(check > 100 || check <= 0 ){
-                    outOfBoundsError = true;
-                    emptyError = false;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(CurrencyActivity.this, "Your value is out of bounds", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     editStudentDiscount();
                     return;
                 }
 
-
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
                         .putString("studentDiscount", newPrice).apply();
-                outOfBoundsError = false;
-                emptyError = false;
                 Toast.makeText(CurrencyActivity.this, "Updated", Toast.LENGTH_SHORT).show();
             }
         }).create().show();
@@ -177,10 +169,6 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
 
 
     private void editTicketPrice(){
-
-        if(emptyError){
-            Toast.makeText(this, "You can't submit an empty value", Toast.LENGTH_SHORT).show();
-        }
 
         LayoutInflater layoutInflater = LayoutInflater.from(CurrencyActivity.this);
         View getEditDialog = layoutInflater.inflate(R.layout.edit_ticket_price, nullParent);
@@ -194,25 +182,40 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
 
         alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                outOfBoundsError = false;
-                emptyError = false;
                 Toast.makeText(CurrencyActivity.this, "Dismissed", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         }).setPositiveButton("Edit", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
-
                 String newPrice = txtNewPrice.getText().toString();
 
                 if(newPrice == null || newPrice.isEmpty()){
-                    emptyError = true;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(CurrencyActivity.this, "You can't submit an empty value", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     editTicketPrice();
                     return;
                 }
+
+                double check = Double.parseDouble(newPrice);
+                if(check > 100 || check <= 0 ){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(CurrencyActivity.this, "Your value is out of bounds", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    editTicketPrice();
+                    return;
+                }
+
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
                         .putString("ticketPrice", newPrice).apply();
-                emptyError = false;
+
                 Toast.makeText(CurrencyActivity.this, "Updated", Toast.LENGTH_SHORT).show();
             }
         }).create().show();

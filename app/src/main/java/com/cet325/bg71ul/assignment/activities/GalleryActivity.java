@@ -74,6 +74,17 @@ public class GalleryActivity extends AppCompatActivity
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long id){
 
+
+                Cursor cursor = (Cursor) list.getItemAtPosition(position);
+                // If the record that comes back from the database is '0' on 'editable' column, this is a pre loaded record
+                // that cannot be deleted.
+                boolean cantBeDeleted = (cursor.getInt(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_EDITABLE)) == 0);
+
+                if(cantBeDeleted){
+                    Toast.makeText(GalleryActivity.this, "You cannot delete this record", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
                 LayoutInflater li = LayoutInflater.from(GalleryActivity.this);
                 View getDeleteDialog = li.inflate(R.layout.delete_gallery,nullParent);
 
@@ -82,11 +93,12 @@ public class GalleryActivity extends AppCompatActivity
 
                 alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int whichButton) {
+                        Toast.makeText(GalleryActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     }
                 }).setPositiveButton("Delete", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        deleteGallery(id, position);
+                        deleteGallery(id);
                     }
                 }).create().show();
                 return true;
@@ -141,7 +153,6 @@ public class GalleryActivity extends AppCompatActivity
     }
 
 
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -153,20 +164,11 @@ public class GalleryActivity extends AppCompatActivity
     }
 
 
-    private void deleteGallery(long id, int position){
+    private void deleteGallery(long id){
+
         String whereClause = MuseumDBOpenHelper.DB_KEY_ID + "= '" + id + "'";
-        Cursor cursor = (Cursor) list.getItemAtPosition(position);
-        boolean isEditable = (cursor.getInt(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_EDITABLE)) == 1);
-
-        if(!isEditable){
-
-            Toast.makeText(this, "You cannot delete this record", Toast.LENGTH_SHORT).show();
-            return;
-
-        }
-
-        getContentResolver().delete(MuseumProvider.CONTENT_URI,whereClause, null);
-        Toast.makeText(this, "Record deleted", Toast.LENGTH_SHORT).show();
+        getContentResolver().delete(MuseumProvider.CONTENT_URI, whereClause, null);
+        Toast.makeText(this, "Gallery deleted", Toast.LENGTH_SHORT).show();
         restartLoader();
 
     }
