@@ -158,7 +158,6 @@ public class GalleryActivity extends AppCompatActivity
         checker = false;
     }
 
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -195,6 +195,10 @@ public class DetailActivity extends AppCompatActivity {
             // edit pre-loaded rank, or fully edit a manually added record.
             editAllFieldsDialog();
         } else {
+<<<<<<< HEAD
+=======
+            //editOnlyRankDialog();
+>>>>>>> d628657df825c0ce564ff6fe2a557d5bbc37c359
             Toast.makeText(this, "You can only edit rank for pre-existing records. However, you can fully edit manually added records.", Toast.LENGTH_LONG).show();
         }
     }
@@ -213,6 +217,7 @@ public class DetailActivity extends AppCompatActivity {
         final TextView titleDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogTitleInput);
         final TextView yearDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogYearInput);
         final TextView descriptionDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogDescriptionInput);
+<<<<<<< HEAD
         final TextView roomDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogRoomInput);
         setRank(rankRatingBar.getRating());
 
@@ -223,6 +228,10 @@ public class DetailActivity extends AppCompatActivity {
         descriptionDialogTextview.setText(gallery.getDescription());
         roomDialogTextview.setText(gallery.getRoom());
 
+=======
+        TextView roomDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogRoomInput);
+        setRank(rankRatingBar.getRating());
+>>>>>>> d628657df825c0ce564ff6fe2a557d5bbc37c359
 
 
         alertDialogBuilder.setView(getEditDialog);
@@ -235,6 +244,7 @@ public class DetailActivity extends AppCompatActivity {
         }).setPositiveButton("Edit", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int whichButton) {
 
+<<<<<<< HEAD
 
                     gallery.setArtist(artistDialogTextview.getText().toString());
                     gallery.setTitle(titleDialogTextview.getText().toString());
@@ -244,6 +254,9 @@ public class DetailActivity extends AppCompatActivity {
 
 
                 if(artistDialogTextview.getText().toString() == " " || artistDialogTextview.getText().toString().isEmpty()
+=======
+                if(artistTextView.getText().toString() == " " || artistDialogTextview.getText().toString().isEmpty()
+>>>>>>> d628657df825c0ce564ff6fe2a557d5bbc37c359
                         || titleDialogTextview.getText().toString() == " " || titleDialogTextview.getText().toString().isEmpty()
                         || yearDialogTextview.getText().toString().isEmpty() || yearDialogTextview.getText().toString() == ""){
                     // Need to run on the current UI thread for toast to warn about missing fields
@@ -297,7 +310,10 @@ public class DetailActivity extends AppCompatActivity {
     public void onStop(){
         super.onStop();
 
+<<<<<<< HEAD
         // When exiting the activity, the data that is ranked will persist
+=======
+>>>>>>> d628657df825c0ce564ff6fe2a557d5bbc37c359
             String where = "_id = " + getID();
             setRank(rankRatingBar.getRating());
 
