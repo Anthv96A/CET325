@@ -108,6 +108,10 @@ public class GalleryActivity extends AppCompatActivity
 
         //set up so it shows all when opening activity
         Menu menu = navigationView.getMenu();
+        View headerLayout = navigationView.getHeaderView(0);
+        TextView copyright = (TextView) headerLayout.findViewById(R.id.textViewCopyRight);
+        String copyrightString = "Copyright © " + Calendar.getInstance().get(Calendar.YEAR);
+        copyright.setText(copyrightString);
         MenuItem all = menu.findItem(R.id.allGallery);
         onNavigationItemSelected(all);
     }
