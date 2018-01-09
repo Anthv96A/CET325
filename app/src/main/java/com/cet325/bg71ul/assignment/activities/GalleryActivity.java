@@ -133,8 +133,8 @@ public class GalleryActivity extends AppCompatActivity
 
 
     private void createNewGallery(Gallery newGallery, View view){
-        // To fully edit and delete records, the editable column MUST be 0
-        // Whereas here we are setting it to 1.
+        // To fully edit and delete records, the editable column MUST be 1
+        // Hence here we are setting it to 1.
         final int editable = 1;
         // Initial ranking of 0 when creating new gallery
         final int initialRank = 0;
