@@ -1,13 +1,11 @@
 <resources>
 
-
     <!--Main Application Name-->
     <string name="app_name">Louvre Museum </string>
     <string name="copyright">Copyright ©  </string>
 
     <!--Splash Screen-->
     <string name="please_wait">Please wait while the application loads &#8230;</string>
-
     <string name="content_description">Image</string>
 
     <!--Main Menu Strings, for buttons, menus, text views etc.-->
@@ -81,7 +79,7 @@
     <string name="selected_room">Room:</string>
     <string name="selected_description">Description:</string>
     <string name="edit_gallery">Edit Gallery</string>
-    <string name="rate_gallery">Rate Gallery</string>
+    <string name="rate_gallery">Gallery</string>
 
     <!--Prices Activity-->
     <string name="title_activity_prices">Admission Prices</string>
@@ -92,7 +90,7 @@
     <string name="title_activity_louvre_maps">Map</string>
 
 
-    <!--Louvre Musuem Maps-->
+    <!--Louvre Museum Maps-->
     <string-array name="places_selection">
         <item>Restaurants</item>
         <item>Hotels</item>

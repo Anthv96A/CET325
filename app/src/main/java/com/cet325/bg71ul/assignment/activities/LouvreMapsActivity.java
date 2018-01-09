@@ -214,6 +214,8 @@ public class LouvreMapsActivity extends FragmentActivity implements OnMapReadyCa
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
 
+
+
         // Programmatically change the text colour of the selected spinner item
         ((TextView) this.googleMapsSpinner.getSelectedView()).setTextColor(getResources().getColor(R.color.blackText));
         ((TextView) this.googleMapsSpinner.getSelectedView()).setGravity(Gravity.CENTER);

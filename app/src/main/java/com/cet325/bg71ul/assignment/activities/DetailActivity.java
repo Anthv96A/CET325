@@ -11,6 +11,8 @@ import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,7 +37,6 @@ public class DetailActivity extends AppCompatActivity {
     private boolean canEditFully;
     private float rank;
     private String title;
-    RatingBar edited;
     TextView artistTextView = null;
     TextView yearTextView = null;
     TextView descriptionTextView = null;
@@ -43,6 +44,7 @@ public class DetailActivity extends AppCompatActivity {
     RatingBar rankRatingBar = null;
     ImageView galleryImage = null;
     final ViewGroup nullParent = null;
+    Gallery gallery = new Gallery();
 
     public String getID(){
         return this.ID;
@@ -69,13 +71,14 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
-            case R.id.gallery_options:{
-                editFields();
-                return true;
+
+            switch (item.getItemId()) {
+                case R.id.gallery_options: {
+                    editFields();
+                    return true;
+                }
             }
 
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -133,7 +136,6 @@ public class DetailActivity extends AppCompatActivity {
             if(image.isEmpty() || image == null){
                 galleryImage.setImageResource(R.drawable.profile_pic);
             } else{
-
                 File file = new File(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), image);
                 try{
                     if(file.exists()){
@@ -151,6 +153,12 @@ public class DetailActivity extends AppCompatActivity {
             descriptionTextView.setText(description);
             roomTextView.setText(room);
             rankRatingBar.setRating(getRank());
+
+            gallery.setArtist(artist);
+            gallery.setTitle(title);
+            gallery.setYear(year);
+            gallery.setDescription(description);
+            gallery.setRoom(room);
 
 
         } catch (Exception e){
@@ -180,8 +188,6 @@ public class DetailActivity extends AppCompatActivity {
     }
 
 
-
-
     private void editFields(){
 
         if(canEditFully){
@@ -189,7 +195,7 @@ public class DetailActivity extends AppCompatActivity {
             // edit pre-loaded rank, or fully edit a manually added record.
             editAllFieldsDialog();
         } else {
-            editOnlyRankDialog();
+            Toast.makeText(this, "You can only edit rank for pre-existing records. However, you can fully edit manually added records.", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -203,52 +209,21 @@ public class DetailActivity extends AppCompatActivity {
         View getEditDialog = layoutInflater.inflate(R.layout.edit_anyfield,nullParent);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DetailActivity.this);
 
-        Gallery editGallery = new Gallery();
-
-        if(artistTextView.getText().toString() != null){
-            editGallery.setArtist(artistTextView.getText().toString());
-        } else {
-            editGallery.setArtist(new String());
-        }
-
-        if(yearTextView.getText().toString() != null){
-            editGallery.setYear(yearTextView.getText().toString());
-        } else{
-            editGallery.setYear(new String());
-        }
-
-        if(roomTextView.getText().toString() != null){
-            editGallery.setRoom(roomTextView.getText().toString());
-        } else{
-            editGallery.setRoom(new String());
-        }
-
-        if(title != null){
-            editGallery.setTitle(title);
-        } else{
-            editGallery.setTitle(new String());
-        }
-
-        if(descriptionTextView.getText().toString() !=  null){
-            editGallery.setDescription(descriptionTextView.getText().toString());
-        } else{
-            editGallery.setDescription(new String());
-        }
-
         final TextView artistDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogArtistInput);
         final TextView titleDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogTitleInput);
         final TextView yearDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogYearInput);
         final TextView descriptionDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogDescriptionInput);
-        TextView roomDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogRoomInput);
+        final TextView roomDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogRoomInput);
+        setRank(rankRatingBar.getRating());
 
-        edited = (RatingBar) getEditDialog.findViewById(R.id.ratingBarAny);
-        edited.setRating(getRank());
 
-        artistDialogTextview.setText(editGallery.getArtist());
-        titleDialogTextview.setText(editGallery.getTitle());
-        yearDialogTextview.setText(editGallery.getYear());
-        descriptionDialogTextview.setText(editGallery.getDescription());
-        roomDialogTextview.setText(editGallery.getRoom());
+        artistDialogTextview.setText(gallery.getArtist());
+        titleDialogTextview.setText(gallery.getTitle());
+        yearDialogTextview.setText(gallery.getYear());
+        descriptionDialogTextview.setText(gallery.getDescription());
+        roomDialogTextview.setText(gallery.getRoom());
+
+
 
         alertDialogBuilder.setView(getEditDialog);
 
@@ -261,10 +236,16 @@ public class DetailActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int whichButton) {
 
 
+                    gallery.setArtist(artistDialogTextview.getText().toString());
+                    gallery.setTitle(titleDialogTextview.getText().toString());
+                    gallery.setYear(yearDialogTextview.getText().toString());
+                    gallery.setDescription(descriptionDialogTextview.getText().toString());
+                    gallery.setRoom(roomDialogTextview.getText().toString());
 
-                if(artistTextView.getText().toString() == " " || artistDialogTextview.getText().toString().isEmpty()
+
+                if(artistDialogTextview.getText().toString() == " " || artistDialogTextview.getText().toString().isEmpty()
                         || titleDialogTextview.getText().toString() == " " || titleDialogTextview.getText().toString().isEmpty()
-                        || yearDialogTextview.getText().toString().isEmpty() || yearTextView.getText().toString() == ""){
+                        || yearDialogTextview.getText().toString().isEmpty() || yearDialogTextview.getText().toString() == ""){
                     // Need to run on the current UI thread for toast to warn about missing fields
                     runOnUiThread(new Runnable() {
                         @Override
@@ -292,17 +273,19 @@ public class DetailActivity extends AppCompatActivity {
                 ContentValues values = new ContentValues();
                 values.put(MuseumDBOpenHelper.DB_KEY_ARTIST, artistDialogTextview.getText().toString());
                 values.put(MuseumDBOpenHelper.DB_KEY_TITLE, titleDialogTextview.getText().toString());
-                values.put(MuseumDBOpenHelper.DB_KEY_ROOM, roomTextView.getText().toString());
+                values.put(MuseumDBOpenHelper.DB_KEY_ROOM, roomDialogTextview.getText().toString());
                 values.put(MuseumDBOpenHelper.DB_KEY_YEAR, yearDialogTextview.getText().toString());
                 values.put(MuseumDBOpenHelper.DB_KEY_DESCRIPTION, descriptionDialogTextview.getText().toString());
-                values.put(MuseumDBOpenHelper.DB_KEY_RANK, edited.getRating());
+                values.put(MuseumDBOpenHelper.DB_KEY_RANK, getRank());
 
                 getContentResolver().update(MuseumProvider.CONTENT_URI,values,where,null);
-                // After editing, we redirect back to newly edited ranking.
-                // Ensure we pass the id, otherwise it will fail
-                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                intent.putExtra("id", getID());
-                startActivity(intent);
+
+                artistTextView.setText(artistDialogTextview.getText().toString());
+                yearTextView.setText(yearDialogTextview.getText().toString());
+                descriptionTextView.setText(descriptionDialogTextview.getText().toString());
+                roomTextView.setText(roomDialogTextview.getText().toString());
+                title = titleDialogTextview.getText().toString();
+                setTitle(titleDialogTextview.getText().toString());
 
             }
         }).create().show();
@@ -310,38 +293,23 @@ public class DetailActivity extends AppCompatActivity {
     }
 
 
-    private void editOnlyRankDialog(){
+    @Override
+    public void onStop(){
+        super.onStop();
 
-        LayoutInflater layoutInflater = LayoutInflater.from(DetailActivity.this);
-        View getEditDialog = layoutInflater.inflate(R.layout.edit_preloaded_rank, nullParent);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DetailActivity.this);
+        // When exiting the activity, the data that is ranked will persist
+            String where = "_id = " + getID();
+            setRank(rankRatingBar.getRating());
 
-        edited = (RatingBar) getEditDialog.findViewById(R.id.editRatingPreLoaded);
-        edited.setRating(getRank());
+            ContentValues values = new ContentValues();
+            values.put(MuseumDBOpenHelper.DB_KEY_RANK, getRank());
+            getContentResolver().update(MuseumProvider.CONTENT_URI, values, where, null);
+    }
 
-        alertDialogBuilder.setView(getEditDialog);
+    @Override
+    protected void onPause(){
+        super.onPause();
 
-        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                Toast.makeText(DetailActivity.this, "Dismissed", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        }).setPositiveButton("Edit", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-
-                String where = "_id = " + getID();
-
-                ContentValues values = new ContentValues();
-                values.put(MuseumDBOpenHelper.DB_KEY_RANK, edited.getRating());
-
-                getContentResolver().update(MuseumProvider.CONTENT_URI,values,where,null);
-                // After editing, we redirect back to newly edited ranking.
-                // Ensure we pass the id, otherwise it will fail
-                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                intent.putExtra("id", getID());
-                startActivity(intent);
-            }
-        }).create().show();
     }
 
 

@@ -52,6 +52,8 @@ public class GalleryActivity extends AppCompatActivity
     private ListView list;
     private int selected;
     final ViewGroup nullParent = null;
+    private boolean checker = false;
+    Gallery gallery = new Gallery();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,17 @@ public class GalleryActivity extends AppCompatActivity
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long id){
 
+
+                Cursor cursor = (Cursor) list.getItemAtPosition(position);
+                // If the record that comes back from the database is '0' on 'editable' column, this is a pre loaded record
+                // that cannot be deleted.
+                boolean cantBeDeleted = (cursor.getInt(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_EDITABLE)) == 0);
+
+                if(cantBeDeleted){
+                    Toast.makeText(GalleryActivity.this, "You cannot delete this record", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
                 LayoutInflater li = LayoutInflater.from(GalleryActivity.this);
                 View getDeleteDialog = li.inflate(R.layout.delete_gallery,nullParent);
 
@@ -82,11 +95,12 @@ public class GalleryActivity extends AppCompatActivity
 
                 alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int whichButton) {
+                        Toast.makeText(GalleryActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     }
                 }).setPositiveButton("Delete", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        deleteGallery(id, position);
+                        deleteGallery(id);
                     }
                 }).create().show();
                 return true;
@@ -138,8 +152,11 @@ public class GalleryActivity extends AppCompatActivity
         Menu menu = navigationView.getMenu();
         MenuItem all = menu.findItem(R.id.allGallery);
         onNavigationItemSelected(all);
-    }
 
+        // Reset form
+        gallery = new Gallery();
+        checker = false;
+    }
 
 
     @Override
@@ -153,20 +170,11 @@ public class GalleryActivity extends AppCompatActivity
     }
 
 
-    private void deleteGallery(long id, int position){
+    private void deleteGallery(long id){
+
         String whereClause = MuseumDBOpenHelper.DB_KEY_ID + "= '" + id + "'";
-        Cursor cursor = (Cursor) list.getItemAtPosition(position);
-        boolean isEditable = (cursor.getInt(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_EDITABLE)) == 1);
-
-        if(!isEditable){
-
-            Toast.makeText(this, "You cannot delete this record", Toast.LENGTH_SHORT).show();
-            return;
-
-        }
-
-        getContentResolver().delete(MuseumProvider.CONTENT_URI,whereClause, null);
-        Toast.makeText(this, "Record deleted", Toast.LENGTH_SHORT).show();
+        getContentResolver().delete(MuseumProvider.CONTENT_URI, whereClause, null);
+        Toast.makeText(this, "Gallery deleted", Toast.LENGTH_SHORT).show();
         restartLoader();
 
     }
@@ -347,6 +355,7 @@ public class GalleryActivity extends AppCompatActivity
 
     private void createDialog(final View view){
 
+        // Used when creating gallery to check for year
         final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
 
@@ -363,6 +372,15 @@ public class GalleryActivity extends AppCompatActivity
         final EditText descriptionInput = (EditText) getGalleryIdView.findViewById(R.id.editTextDialogDescriptionInput);
         final EditText yearInput = (EditText) getGalleryIdView.findViewById(R.id.editTextDialogYearInput);
 
+        // Checks to see if the form has been submitted, then we can fetch values
+        if(checker){
+            artistInput.setText(gallery.getArtist());
+            titleInput.setText(gallery.getTitle());
+            roomInput.setText(gallery.getRoom());
+            descriptionInput.setText(gallery.getDescription());
+            yearInput.setText(gallery.getYear());
+        }
+
         createNewGallery.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -370,9 +388,16 @@ public class GalleryActivity extends AppCompatActivity
                 Snackbar snackbar = Snackbar.make(view, "Action Cancelled", Snackbar.LENGTH_SHORT);
 
                 snackbar.setAction("Action",null).show();
+                checker = false;
             }
         }).setPositiveButton("Create", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialogInterface, int i){
+
+                gallery.setArtist(artistInput.getText().toString());
+                gallery.setTitle(titleInput.getText().toString());
+                gallery.setRoom(roomInput.getText().toString());
+                gallery.setDescription(descriptionInput.getText().toString());
+                gallery.setYear(yearInput.getText().toString());
 
                 if(artistInput.getText().toString().trim().isEmpty() || artistInput.getText().length() == 0
                         || titleInput.getText().toString().trim().isEmpty() || titleInput.getText().length() == 0
@@ -387,6 +412,7 @@ public class GalleryActivity extends AppCompatActivity
                         }
                     });
                     // Recursive method call to dialog if mandatory fields are not met.
+                    checker = true;
                     createDialog(view);
                     return;
                 }
@@ -404,7 +430,7 @@ public class GalleryActivity extends AppCompatActivity
                     return;
                 }
 
-                    Gallery gallery = new Gallery();
+
                     gallery.setArtist(artistInput.getText().toString());
                     gallery.setTitle(titleInput.getText().toString());
                     gallery.setRoom(roomInput.getText().toString());

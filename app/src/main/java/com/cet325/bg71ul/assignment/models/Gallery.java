@@ -14,6 +14,10 @@ public class Gallery {
     private String rank;
     private String year;
 
+
+    public Gallery() {
+    }
+
     public int getId() {
         return id;
     }

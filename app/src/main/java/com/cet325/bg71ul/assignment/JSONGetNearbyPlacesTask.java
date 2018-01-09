@@ -81,7 +81,7 @@ public class JSONGetNearbyPlacesTask extends AsyncTask<Object,String,String> {
 
             this.googleMap.addMarker(markerOptions);
             this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            this.googleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+            this.googleMap.animateCamera(CameraUpdateFactory.zoomTo(14));
 
         }
 

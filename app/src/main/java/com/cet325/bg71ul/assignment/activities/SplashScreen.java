@@ -36,7 +36,7 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
 
 
     // Splash screen self executed method duration
-    private static final int DURATION = 2000;
+    private static final int DURATION = 1000;
     private static final int WRITE_TO_EXTERNAL_STORAGE = 0;
     public static final int REQUEST_LOCATION_CODE = 99;
 
@@ -84,7 +84,7 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                                 Thread sleeperThread = new Thread();
                                 try {
                                     // Sleep for one second
-                                    sleeperThread.sleep(1000);
+                                    sleeperThread.sleep(500);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
