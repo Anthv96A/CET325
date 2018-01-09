@@ -122,12 +122,14 @@ public class DetailActivity extends AppCompatActivity {
             canEditFully = (cursor.getInt(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_EDITABLE)) == 1);
 
 
+            // Default rank to 0 if it is null
             if(ranking == null){
                 setRank(0);
             } else{
                 setRank(Float.parseFloat(ranking));
             }
 
+            // As room is NOT mandatory, check it has been filled or not
             if(room == null || room.isEmpty()){
                 room = "No room yet set";
             }
@@ -154,6 +156,7 @@ public class DetailActivity extends AppCompatActivity {
             roomTextView.setText(room);
             rankRatingBar.setRating(getRank());
 
+            // Using the Gallery instance to get the data on first run
             gallery.setArtist(artist);
             gallery.setTitle(title);
             gallery.setYear(year);
@@ -173,7 +176,7 @@ public class DetailActivity extends AppCompatActivity {
         MuseumDBOpenHelper museumDBOpenHelper = new MuseumDBOpenHelper(this);
         SQLiteDatabase sqLiteDatabase = museumDBOpenHelper.getReadableDatabase();
 
-        // Fetch record that the user has clicked
+        // Fetch record that the user has clicked from the gallery activity
         Cursor cursor = sqLiteDatabase.query(
                 MuseumDBOpenHelper.MUSEUM_TABLE_NAME,
                 museumDBOpenHelper.ALL_COLUMNS,
@@ -181,8 +184,7 @@ public class DetailActivity extends AppCompatActivity {
                 new String[]{getID()},
                 null,
                 null,
-                null
-        );
+                null);
 
         return cursor;
     }
@@ -195,14 +197,9 @@ public class DetailActivity extends AppCompatActivity {
             // edit pre-loaded rank, or fully edit a manually added record.
             editAllFieldsDialog();
         } else {
-<<<<<<< HEAD
-=======
-            //editOnlyRankDialog();
->>>>>>> d628657df825c0ce564ff6fe2a557d5bbc37c359
             Toast.makeText(this, "You can only edit rank for pre-existing records. However, you can fully edit manually added records.", Toast.LENGTH_LONG).show();
         }
     }
-
 
 
     private void editAllFieldsDialog(){
@@ -217,21 +214,16 @@ public class DetailActivity extends AppCompatActivity {
         final TextView titleDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogTitleInput);
         final TextView yearDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogYearInput);
         final TextView descriptionDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogDescriptionInput);
-<<<<<<< HEAD
         final TextView roomDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogRoomInput);
         setRank(rankRatingBar.getRating());
 
 
+        // Use the data from the gallery instance when the activity first loads
         artistDialogTextview.setText(gallery.getArtist());
         titleDialogTextview.setText(gallery.getTitle());
         yearDialogTextview.setText(gallery.getYear());
         descriptionDialogTextview.setText(gallery.getDescription());
         roomDialogTextview.setText(gallery.getRoom());
-
-=======
-        TextView roomDialogTextview = (TextView) getEditDialog.findViewById(R.id.editTextDialogRoomInput);
-        setRank(rankRatingBar.getRating());
->>>>>>> d628657df825c0ce564ff6fe2a557d5bbc37c359
 
 
         alertDialogBuilder.setView(getEditDialog);
@@ -244,8 +236,8 @@ public class DetailActivity extends AppCompatActivity {
         }).setPositiveButton("Edit", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int whichButton) {
 
-<<<<<<< HEAD
-
+                    // Set the values from the user input so we don't lose the data
+                    // if the field are invalid.
                     gallery.setArtist(artistDialogTextview.getText().toString());
                     gallery.setTitle(titleDialogTextview.getText().toString());
                     gallery.setYear(yearDialogTextview.getText().toString());
@@ -254,15 +246,13 @@ public class DetailActivity extends AppCompatActivity {
 
 
                 if(artistDialogTextview.getText().toString() == " " || artistDialogTextview.getText().toString().isEmpty()
-=======
-                if(artistTextView.getText().toString() == " " || artistDialogTextview.getText().toString().isEmpty()
->>>>>>> d628657df825c0ce564ff6fe2a557d5bbc37c359
                         || titleDialogTextview.getText().toString() == " " || titleDialogTextview.getText().toString().isEmpty()
                         || yearDialogTextview.getText().toString().isEmpty() || yearDialogTextview.getText().toString() == ""){
                     // Need to run on the current UI thread for toast to warn about missing fields
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            // Artist, title and year are mandatory
                             Toast.makeText(DetailActivity.this, "Please insert into Artist, Title and Year.", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -275,6 +265,7 @@ public class DetailActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            // Stop user adding a year pass the current year we are in.
                             Toast.makeText(DetailActivity.this, "You are trying to add a year greater than " + currentYear , Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -282,6 +273,8 @@ public class DetailActivity extends AppCompatActivity {
                     return;
                 }
 
+
+                // If the form is valid save the data and update the current activity
                 String where = "_id = " + getID();
                 ContentValues values = new ContentValues();
                 values.put(MuseumDBOpenHelper.DB_KEY_ARTIST, artistDialogTextview.getText().toString());
@@ -293,6 +286,9 @@ public class DetailActivity extends AppCompatActivity {
 
                 getContentResolver().update(MuseumProvider.CONTENT_URI,values,where,null);
 
+                Toast.makeText(DetailActivity.this, "Updated", Toast.LENGTH_SHORT).show();
+
+                // After saving the data, append the current activity fields
                 artistTextView.setText(artistDialogTextview.getText().toString());
                 yearTextView.setText(yearDialogTextview.getText().toString());
                 descriptionTextView.setText(descriptionDialogTextview.getText().toString());
@@ -309,11 +305,8 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public void onStop(){
         super.onStop();
-
-<<<<<<< HEAD
-        // When exiting the activity, the data that is ranked will persist
-=======
->>>>>>> d628657df825c0ce564ff6fe2a557d5bbc37c359
+            // When exiting the activity, the data that is ranked will persist
+            // Make sure the rank is set to the user's input before persisting the data
             String where = "_id = " + getID();
             setRank(rankRatingBar.getRating());
 

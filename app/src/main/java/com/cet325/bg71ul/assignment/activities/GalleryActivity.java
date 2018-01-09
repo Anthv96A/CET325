@@ -51,9 +51,9 @@ public class GalleryActivity extends AppCompatActivity
     private CursorAdapter cursorAdapter = null;
     private ListView list;
     private int selected;
-    final ViewGroup nullParent = null;
+    private final ViewGroup nullParent = null;
     private boolean checker = false;
-    Gallery gallery = new Gallery();
+    private Gallery gallery = new Gallery();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,6 @@ public class GalleryActivity extends AppCompatActivity
         list.setClickable(true);
 
         list.setOnItemClickListener(this.clicked);
-
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
 
             @Override
@@ -124,15 +123,20 @@ public class GalleryActivity extends AppCompatActivity
         Menu menu = navigationView.getMenu();
         View headerLayout = navigationView.getHeaderView(0);
         TextView copyright = (TextView) headerLayout.findViewById(R.id.textViewCopyRight);
+        // Updating the copyright with calender year
         String copyrightString = "Copyright © " + Calendar.getInstance().get(Calendar.YEAR);
         copyright.setText(copyrightString);
         MenuItem all = menu.findItem(R.id.allGallery);
+        // Select all from table when starting activity
         onNavigationItemSelected(all);
     }
 
 
     private void createNewGallery(Gallery newGallery, View view){
+        // To fully edit and delete records, the editable column MUST be 0
+        // Whereas here we are setting it to 1.
         final int editable = 1;
+        // Initial ranking of 0 when creating new gallery
         final int initialRank = 0;
 
         ContentValues values = new ContentValues();
@@ -155,6 +159,7 @@ public class GalleryActivity extends AppCompatActivity
 
         // Reset form
         gallery = new Gallery();
+        // Reset checker which checks for data from user input
         checker = false;
     }
 
@@ -170,10 +175,11 @@ public class GalleryActivity extends AppCompatActivity
 
 
     private void deleteGallery(long id){
-
+        // Delete record manually added record,
         String whereClause = MuseumDBOpenHelper.DB_KEY_ID + "= '" + id + "'";
         getContentResolver().delete(MuseumProvider.CONTENT_URI, whereClause, null);
         Toast.makeText(this, "Gallery deleted", Toast.LENGTH_SHORT).show();
+        // Restart loader when deleted
         restartLoader();
 
     }
@@ -186,7 +192,7 @@ public class GalleryActivity extends AppCompatActivity
         int id = item.getItemId();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-
+        // Queries which fetches data based on RANKED, NOT RANKED etc.
         switch (id){
             case R.id.goBack:
                 Intent mainMenu = new Intent(getApplicationContext(), MainMenu.class);
@@ -232,13 +238,15 @@ public class GalleryActivity extends AppCompatActivity
 
     // This method is responsible for all the different query criteria
     public void makeQuery(int index){
-        this.list = (ListView) findViewById(R.id.listView_gallery);
 
+        this.list = (ListView) findViewById(R.id.listView_gallery);
+        // Get database
         MuseumDBOpenHelper museumDBOpenHelper = new MuseumDBOpenHelper(this);
         SQLiteDatabase database = museumDBOpenHelper.getReadableDatabase();
 
         // Make sure table is immutable
         final String Database_table = MuseumDBOpenHelper.MUSEUM_TABLE_NAME;
+        // Selection columns to query data, initially set to null
         String[] columns = {"*"};
         String groupBy = null;
         String having = null;
@@ -247,23 +255,23 @@ public class GalleryActivity extends AppCompatActivity
         String[] selectionArgs = null;
 
         switch (index){
-            case 0:
+            case 0: // All
                 // Show all nothing is required here as this is only a select all statement
                 this.selected = 1;
                 break;
-            case 1:
+            case 1: // Ranked
                 // Select all from database who have been ranked
                 where =  MuseumDBOpenHelper.DB_KEY_RANK + " != ?";
                 selectionArgs = new String[]{"0"};
                 this.selected = 2;
                 break;
-            case 2:
+            case 2: // Not Ranked
                 // Select all from database who have NOT been ranked
                 where =  MuseumDBOpenHelper.DB_KEY_RANK + " = ?";
                 selectionArgs = new String[]{"0"};
                 this.selected = 3;
                 break;
-            case 3:
+            case 3: // Artist and Title
                 if(this.selected == 1){
                     // If all is selected, then order by artist and title
                     orderBy = MuseumDBOpenHelper.DB_KEY_ARTIST + " asc, " + MuseumDBOpenHelper.DB_KEY_TITLE + " asc";
@@ -280,7 +288,7 @@ public class GalleryActivity extends AppCompatActivity
                 }
 
                 break;
-            case 4:
+            case 4: // Title
                 if(this.selected == 1){
                     // If all is selected, then order by title
                     orderBy = MuseumDBOpenHelper.DB_KEY_TITLE + " asc";
@@ -296,7 +304,7 @@ public class GalleryActivity extends AppCompatActivity
                     orderBy = MuseumDBOpenHelper.DB_KEY_TITLE + " asc";
                 }
                 break;
-            case 5:
+            case 5: // Rank
                 if(this.selected == 1){
                     // If all is selected, then order by rank descending
                     orderBy = MuseumDBOpenHelper.DB_KEY_RANK + " desc";
@@ -388,6 +396,7 @@ public class GalleryActivity extends AppCompatActivity
 
                 snackbar.setAction("Action",null).show();
                 checker = false;
+                gallery = new Gallery();
             }
         }).setPositiveButton("Create", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialogInterface, int i){
@@ -425,11 +434,10 @@ public class GalleryActivity extends AppCompatActivity
                         }
                     });
                     // Recursive method call to dialog if mandatory fields are not met.
+                    checker = true;
                     createDialog(view);
                     return;
                 }
-
-
                     gallery.setArtist(artistInput.getText().toString());
                     gallery.setTitle(titleInput.getText().toString());
                     gallery.setRoom(roomInput.getText().toString());
@@ -474,6 +482,7 @@ public class GalleryActivity extends AppCompatActivity
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+            // Set up click listener for selecting a gallery to be detailed
             Cursor cursor = (Cursor) list.getItemAtPosition(i);
             String selected = cursor.getString(cursor.getColumnIndex(MuseumDBOpenHelper.DB_KEY_ID));
 
