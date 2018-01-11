@@ -30,7 +30,7 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
     private int selectedPosition;
     private String yourCurrency;
     private int initialLoading = 0;
-    final ViewGroup nullParent = null;
+    private final ViewGroup nullParent = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +134,7 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
             }
         }).setPositiveButton("Edit", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-
+                // Illegal to submit null or empty value
                 String newPrice = txtNewStudentDiscount.getText().toString();
                 if(newPrice == null || newPrice.isEmpty()){
 
@@ -147,13 +147,26 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
                     editStudentDiscount();
                     return;
                 }
-
+                // Different errors for different scenarios.
                 double check = Double.parseDouble(txtNewStudentDiscount.getText().toString());
-                if(check > 100 || check <= 0 ){
+                // Maximum student discount should be 99 %
+                if(check >= 100 ){
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(CurrencyActivity.this, "Your value is out of bounds", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CurrencyActivity.this, "Maximum student discount is 99", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    editStudentDiscount();
+                    return;
+                }
+                // Blocks user trying to submit a value of 0 or less.
+                // This also stops zero division errors
+                if(check <= 0){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(CurrencyActivity.this, "You can't have student discount at 0 or less", Toast.LENGTH_SHORT).show();
                         }
                     });
                     editStudentDiscount();
@@ -189,7 +202,7 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
             public void onClick(DialogInterface dialog, int whichButton) {
 
                 String newPrice = txtNewPrice.getText().toString();
-
+                // Illegal to submit empty or null value
                 if(newPrice == null || newPrice.isEmpty()){
                     runOnUiThread(new Runnable() {
                         @Override
@@ -200,13 +213,13 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
                     editTicketPrice();
                     return;
                 }
-
+                // Making sure the price is reasonably kept between 0 and 200 Euros
                 double check = Double.parseDouble(newPrice);
-                if(check > 100 || check <= 0 ){
+                if(check > 200 || check <= 0 ){
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(CurrencyActivity.this, "Your value is out of bounds", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CurrencyActivity.this, "Minimum price 0 and maximum of 200 Euros", Toast.LENGTH_SHORT).show();
                         }
                     });
                     editTicketPrice();

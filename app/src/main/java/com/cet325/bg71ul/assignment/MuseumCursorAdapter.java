@@ -56,9 +56,28 @@ public class MuseumCursorAdapter extends CursorAdapter{
         }
 
         // As the room field is not mandatory, we need to check it is not null before we bind
+        // Else check for the length whether we need to shorter the string or not
         if(room == null || room.isEmpty()){
             room = "No room set";
+        } else{
+            if(room.length() > 20){
+                room = room.substring(0,19);
+                room += "...";
+            }
         }
+
+        // This makes sure the title length in the master view doesn't stretch too long
+        if(title.length() > 45){
+            title = title.substring(0,44);
+            title += "...";
+        }
+        // This deals with artists with really long names, but to keep consistency on list view space
+        if(artist.length() > 24){
+            artist = artist.substring(0,23);
+            artist += "...";
+        }
+
+
 
 
         TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
