@@ -1,8 +1,10 @@
 package com.cet325.bg71ul.assignment.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -15,22 +17,32 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cet325.bg71ul.assignment.JSONCurrencyTask;
 import com.cet325.bg71ul.assignment.R;
+import com.cet325.bg71ul.assignment.models.CurrencyRate;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CurrencyActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
 
     private Spinner spinner = null;
+    private Button exitBtn = null;
+    private Button refreshBtn = null;
     private ArrayAdapter currencyAdapter = null;
     private SharedPreferences currencyPreferences = null;
     private int selectedPosition;
     private String yourCurrency;
     private int initialLoading = 0;
     private final ViewGroup nullParent = null;
+    private List<CurrencyRate> currencyRates = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +51,16 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
 
         setContentView(R.layout.activity_currency);
 
+        Intent intent = getIntent();
+
+        // Check local currency rates are not null, otherwise it will fail
+        if(intent.getSerializableExtra("localCurrencyRates") != null){
+            this.currencyRates = (List<CurrencyRate>) intent.getSerializableExtra("localCurrencyRates");
+        }
+
         this.currencyPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        this.exitBtn = (Button) findViewById(R.id.btnExit);
+        this.refreshBtn = (Button) findViewById(R.id.btnRefresh);
 
         // Selected currency
         this.yourCurrency = currencyPreferences.getString("yourCurrency", "DEFAULT");
@@ -233,5 +254,67 @@ public class CurrencyActivity extends AppCompatActivity implements AdapterView.O
             }
         }).create().show();
     }
+
+    // Button which handles the refreshed rates
+    public void refreshRates(final View view){
+
+        final List<CurrencyRate> checkrates = new ArrayList<CurrencyRate>();
+        // While rates are been fetched, disable buttons
+        exitBtn.setEnabled(false);
+        refreshBtn.setEnabled(false);
+
+        Snackbar.make(view, "Loading...", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Action", null).show();
+
+        // Refresh rates
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                String[] currencies = getResources().getStringArray(R.array.currencies);
+                JSONCurrencyTask task = new JSONCurrencyTask();
+
+                checkrates.addAll(task.fetchCurrencyRates(currencies,"EUR"));
+
+                // Pause for one second
+                Thread sleeper = new Thread();
+                try {
+                    sleeper.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+                // Re-enable buttons
+                exitBtn.setEnabled(true);
+                refreshBtn.setEnabled(true);
+
+                // Take the first result, if the rate 0.0 then API failed
+                // We don't want to erase the previous currency rates if the rates are coming back empty,
+                // but we want to let user know that it failed
+                if(checkrates.get(0).getCurrencyRate() == 0.0){
+                    Snackbar.make(view, "Failed to fetch currency rates", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+
+                }else {
+                    // Clear the list of rates ready for the refreshed rates
+                    currencyRates = new ArrayList<>();
+                    Snackbar.make(view, "Successfully downloaded new rates", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    currencyRates = checkrates;
+                }
+            }
+        }, 3000);
+    }
+
+    public void exit(View view){
+        Intent intent = new Intent(CurrencyActivity.this, MainMenu.class);
+        intent.putExtra("localCurrencyRates", (Serializable) currencyRates);
+        startActivity(intent);
+        finish();
+    }
+
+
+
 
 }

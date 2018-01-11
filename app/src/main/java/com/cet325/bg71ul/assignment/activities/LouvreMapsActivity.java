@@ -229,6 +229,16 @@ public class LouvreMapsActivity extends FragmentActivity implements OnMapReadyCa
         // The selected is whatever the spinner value maybe.
         String selected = this.googleMapsSpinner.getSelectedItem().toString();
 
+        if(selected.equals("Shops")){
+            selected = "magasins";
+        } else if(selected.equals("Hotels")){
+            selected = "hôtels";
+        }else if(selected.equals("Cafe")){
+            selected = "café";
+        } else if(selected.equals("Restaurants")){
+            selected = "Restaurants";
+        }
+
         // Initialise Object Array
         Object dataTransfer[] = new Object[2];
         // Initialise JSONGetNearbyPlacesTask
@@ -237,6 +247,7 @@ public class LouvreMapsActivity extends FragmentActivity implements OnMapReadyCa
         // Clear the map ready for the next search
         mMap.clear();
         // Extract the values to be added in a String Array
+        Log.d("SELECTED", selected);
         String[] values = extractValues(latitude,longitude, selected);
         // Add Google Maps
         dataTransfer[0] = mMap;

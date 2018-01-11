@@ -3,6 +3,7 @@ package com.cet325.bg71ul.assignment.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.Snackbar;
@@ -16,15 +17,19 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
 
 import com.cet325.bg71ul.assignment.CurrencyConverter;
+import com.cet325.bg71ul.assignment.JSONCurrencyTask;
 import com.cet325.bg71ul.assignment.R;
 import com.cet325.bg71ul.assignment.models.CurrencyRate;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -120,6 +125,7 @@ public class PricesActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
     }
+
 
 
     /**

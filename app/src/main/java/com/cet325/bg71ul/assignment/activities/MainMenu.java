@@ -69,14 +69,17 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        Intent intent = null;
+        Intent intent;
 
         // The buttons that will give access to the core functionality of the application
         switch (id){
             case R.id.btn_gallery:
-                intent = new Intent(getApplicationContext(),GalleryActivity.class);
+                // Once we start activity, destroy the main menu activity on the stack
+                intent = new Intent(MainMenu.this,GalleryActivity.class);
+                intent.putExtra("localCurrencyRates", (Serializable) currencyRates);
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                finish();
                 break;
             case R.id.btn_google_maps:
                 intent = new Intent(getApplicationContext(), LouvreMapsActivity.class);
@@ -84,9 +87,12 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 break;
             case R.id.btn_currency:
-                intent = new Intent(getApplicationContext(),CurrencyActivity.class);
+                // Once we start activity, destroy the main menu activity on the stack
+                intent = new Intent(MainMenu.this,CurrencyActivity.class);
+                intent.putExtra("localCurrencyRates", (Serializable) currencyRates);
                 startActivity(intent);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                finish();
                 break;
             default:
                 Toast.makeText(this, "Unrecognised", Toast.LENGTH_SHORT).show();

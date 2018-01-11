@@ -34,6 +34,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cet325.bg71ul.assignment.models.CurrencyRate;
 import com.cet325.bg71ul.assignment.models.Gallery;
 import com.cet325.bg71ul.assignment.MuseumCursorAdapter;
 import com.cet325.bg71ul.assignment.MuseumDBOpenHelper;
@@ -43,8 +44,11 @@ import com.cet325.bg71ul.assignment.R;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class GalleryActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener{
@@ -54,11 +58,18 @@ public class GalleryActivity extends AppCompatActivity
     private final ViewGroup nullParent = null;
     private boolean checker = false;
     private Gallery gallery = new Gallery();
+    private List<CurrencyRate> currencyRates = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
+        Intent intent = getIntent();
+
+        // Check local currency rates are not null, otherwise it will fail
+        if(intent.getSerializableExtra("localCurrencyRates") != null){
+            this.currencyRates = (List<CurrencyRate>) intent.getSerializableExtra("localCurrencyRates");
+        }
 
         restartLoader();
 
@@ -196,6 +207,7 @@ public class GalleryActivity extends AppCompatActivity
         switch (id){
             case R.id.goBack:
                 Intent mainMenu = new Intent(getApplicationContext(), MainMenu.class);
+                mainMenu.putExtra("localCurrencyRates",(Serializable) currencyRates);
                 startActivity(mainMenu);
                 break;
             case R.id.allGallery:

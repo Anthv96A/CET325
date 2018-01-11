@@ -18,7 +18,7 @@ public class NearbyPlacesHttpClient {
     private static final String GOOGLE_PLACES_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
     private static String location;
     // Distance radius around location
-    private static final String distanceRadius = "&radius=10000";
+    private static final String distanceRadius = "&radius=70000";
     private static String nearbyPlace;
     // Sensor true
     private static final String sensor = "&sensor=true";

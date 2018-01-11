@@ -83,7 +83,7 @@ public class SplashScreen extends AppCompatActivity implements ActivityCompat.On
                                 // Ensure the currency task completes
                                 Thread sleeperThread = new Thread();
                                 try {
-                                    // Sleep for one second
+                                    // Sleep for half a second
                                     sleeperThread.sleep(500);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();

@@ -66,8 +66,12 @@
     <string name="student_discount">Student Discount</string>
     <string name="currency_info">
         In this page, you have access to change the following:
-        Your selected currency, ticket price and student discount rates.
+        Your selected currency, ticket price, updating the latest currency rates and student discount rates.
     </string>
+
+    <string name="refresh">Update Currency Rates</string>
+    <string name="exit">Back to main menu</string>
+
 
     <string name="ticket_price_edit">Enter the latest ticket price</string>
     <string name="student_discount_edit">Enter new student discount percentage</string>
