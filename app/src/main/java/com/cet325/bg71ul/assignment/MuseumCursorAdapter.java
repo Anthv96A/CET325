@@ -72,8 +72,8 @@ public class MuseumCursorAdapter extends CursorAdapter{
             title += "...";
         }
         // This deals with artists with really long names, but to keep consistency on list view space
-        if(artist.length() > 24){
-            artist = artist.substring(0,23);
+        if(artist.length() > 19){
+            artist = artist.substring(0,18);
             artist += "...";
         }
 

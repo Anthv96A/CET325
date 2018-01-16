@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.cet325.bg71ul.assignment.activities.MainMenu"
     tools:layout_editor_absoluteY="81dp"
+    android:background="@drawable/background"
     tools:layout_editor_absoluteX="0dp">
 
 
@@ -24,24 +25,24 @@
     </RelativeLayout>
 
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="561dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
-        android:contentDescription="@string/content_description"
-        android:background="@drawable/background"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.82"
-        app:layout_constraintHorizontal_bias="0.52" />
+    <!--<ImageView-->
+        <!--android:id="@+id/imageView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="561dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginLeft="4dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--android:contentDescription="@string/content_description"-->
+        <!--android:background="@drawable/background"-->
+        <!--android:scaleType="fitCenter"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintVertical_bias="0.82"-->
+        <!--app:layout_constraintHorizontal_bias="0.52" />-->
 
     <Button
         android:id="@+id/btn_gallery"
